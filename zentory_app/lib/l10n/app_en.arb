@@ -1,0 +1,21 @@
+{
+  "@@locale": "en",
+  "appTitle": "Zentory",
+  "inventory": "Inventory",
+  "history": "History",
+  "team": "Team",
+  "profile": "Profile",
+  "dashboard": "Dashboard",
+  "addProduct": "Add Product",
+  "editProduct": "Edit Product",
+  "saveChanges": "Save Changes",
+  "deleteProduct": "Delete Product",
+  "searchProducts": "Search products...",
+  "noProducts": "No products",
+  "noProductsDesc": "You haven't added anything to your inventory yet.",
+  "addFirstProduct": "Add first product",
+  "stock": "Stock",
+  "price": "Price",
+  "category": "Category",
+  "offlineMode": "Offline Mode - Changes will be synced soon"
+}
