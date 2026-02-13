@@ -12,8 +12,8 @@ import 'package:zentory_app/core/theme/app_theme.dart';
 import 'package:zentory_app/common/utils/validation_messages.dart';
 import 'package:zentory_app/common/widgets/offline_banner.dart';
 import 'package:zentory_app/core/router/auth_guard.dart';
-import 'package:zentory_app/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:zentory_app/features/settings/presentation/bloc/settings_bloc.dart';
+import 'package:zentory_app/presentation/blocs/auth_bloc.dart';
+import 'package:zentory_app/presentation/blocs/settings_bloc.dart';
 import 'package:zentory_app/common/utils/logger.dart';
 
 Future<void> main() async {

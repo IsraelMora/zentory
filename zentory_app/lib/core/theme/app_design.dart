@@ -64,4 +64,8 @@ class AppDesign {
   // --- Shadow Styles (Removed as per design preference) ---
   static List<BoxShadow> get shadowLight => const [];
   static List<BoxShadow> get shadowMedium => const [];
+
+  // --- Layout Constants ---
+  static const double dialogMaxWidth = 400.0;
+  static const double dividerThickness = 1.0;
 }

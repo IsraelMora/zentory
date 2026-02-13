@@ -173,135 +173,174 @@ class L10nEn extends L10n {
   String get createProduct => 'Create Product';
 
   @override
-  String get workspaces => 'Espacios de Trabajo';
+  String get workspaces => 'Workspaces';
 
   @override
-  String get newWorkspace => 'Nuevo Espacio';
+  String get newWorkspace => 'New Workspace';
 
   @override
-  String get workspaceName => 'Nombre del espacio';
+  String get workspaceName => 'Workspace name';
 
   @override
-  String get workspaceNameHint => 'Ej: Almacén Principal';
+  String get workspaceNameHint => 'Ex: Main Warehouse';
 
   @override
-  String get createWorkspace => 'Crear Espacio';
+  String get createWorkspace => 'Create Workspace';
 
   @override
-  String get noMembers => 'Sin miembros';
+  String get noMembers => 'No members';
 
   @override
-  String get noMembersDesc => 'Invita a tu equipo para empezar a colaborar.';
+  String get noMembersDesc => 'Invite your team to start collaborating.';
 
   @override
-  String get inviteMember => 'Invitar Miembro';
+  String get inviteMember => 'Invite Member';
 
   @override
-  String get email => 'Correo electrónico';
+  String get email => 'Email';
 
   @override
-  String get emailHint => 'ejemplo@correo.com';
+  String get emailHint => 'example@email.com';
 
   @override
-  String get role => 'Rol';
+  String get role => 'Role';
 
   @override
-  String get sendInvitation => 'Enviar Invitación';
+  String get sendInvitation => 'Send Invitation';
 
   @override
-  String get logout => 'Cerrar Sesión';
+  String get logout => 'Log Out';
 
   @override
-  String get logoutConfirm => '¿Cerrar Sesión?';
+  String get logoutConfirm => 'Log Out?';
 
   @override
-  String get logoutDesc => '¿Estás seguro de que deseas cerrar sesión?';
+  String get logoutDesc => 'Are you sure you want to log out?';
 
   @override
-  String get letsGetStarted => '¡Comencemos!';
+  String get letsGetStarted => 'Let\'s Get Started!';
 
   @override
   String get letsGetStartedDesc =>
-      'Crea tu primer espacio de trabajo para comenzar a gestionar tu inventario.';
+      'Create your first workspace to start managing your inventory.';
 
   @override
-  String get errorLoadingWorkspaces => 'Error al cargar espacios';
+  String get errorLoadingWorkspaces => 'Error loading workspaces';
 
   @override
-  String get members => 'miembros';
+  String get members => 'members';
 
   @override
-  String get yourWorkspaces => 'Tus Espacios';
+  String get yourWorkspaces => 'Your Workspaces';
 
   @override
-  String get notifications => 'Notificaciones';
+  String get notifications => 'Notifications';
 
   @override
-  String get allCaughtUp => 'Todo al día';
+  String get allCaughtUp => 'All Caught Up';
 
   @override
-  String get allCaughtUpDesc => 'No tienes notificaciones pendientes.';
+  String get allCaughtUpDesc => 'You have no pending notifications.';
 
   @override
-  String get editName => 'Editar Nombre';
+  String get editName => 'Edit Name';
 
   @override
-  String get fullName => 'Nombre Completo';
+  String get fullName => 'Full Name';
 
   @override
-  String get save => 'Guardar';
+  String get save => 'Save';
 
   @override
-  String get changePassword => 'Cambiar Contraseña';
+  String get changePassword => 'Change Password';
 
   @override
-  String get currentPassword => 'Contraseña Actual';
+  String get currentPassword => 'Current Password';
 
   @override
-  String get newPassword => 'Nueva Contraseña';
+  String get newPassword => 'New Password';
 
   @override
-  String get confirmPassword => 'Confirmar Contraseña';
+  String get confirmPassword => 'Confirm Password';
 
   @override
-  String get update => 'Actualizar';
+  String get update => 'Update';
 
   @override
-  String get themeAndAppearance => 'Tema y Apariencia';
+  String get themeAndAppearance => 'Theme and Appearance';
 
   @override
-  String get automaticSystem => 'Automático (Sistema)';
+  String get automaticSystem => 'Automatic (System)';
 
   @override
-  String get lightMode => 'Modo Claro';
+  String get lightMode => 'Light Mode';
 
   @override
-  String get darkMode => 'Modo Oscuro';
+  String get darkMode => 'Dark Mode';
 
   @override
-  String get close => 'Cerrar';
+  String get close => 'Close';
 
   @override
-  String get loadingProfile => 'Cargando perfil...';
+  String get loadingProfile => 'Loading profile...';
 
   @override
-  String get password => 'Contraseña';
+  String get password => 'Password';
 
   @override
-  String get logoutDescAlt => '¿Estás seguro de que quieres salir?';
+  String get logoutDescAlt => 'Are you sure you want to exit?';
 
   @override
-  String get login => 'Iniciar Sesión';
+  String get login => 'Log In';
 
   @override
-  String get createAccount => 'Crear Cuenta';
+  String get createAccount => 'Create Account';
 
   @override
-  String get fullNameHint => 'Ej. Juan Pérez';
+  String get fullNameHint => 'Ex. John Doe';
 
   @override
-  String get emailPlaceholder => 'nombre@ejemplo.com';
+  String get emailPlaceholder => 'name@example.com';
 
   @override
   String get passwordPlaceholder => '••••••••';
+
+  @override
+  String get welcomeBack => 'Welcome';
+
+  @override
+  String get joinZentory => 'Join Zentory';
+
+  @override
+  String get manageEverything => 'Manage everything from one place.';
+
+  @override
+  String get createAccountInSeconds => 'Create your account in seconds.';
+
+  @override
+  String get dontHaveAccount => 'Don\'t have an account?';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get signUp => 'Sign Up';
+
+  @override
+  String get logIn => 'Log In';
+
+  @override
+  String get fieldRequired => 'Required field';
+
+  @override
+  String get minCharacters => 'Minimum 8 characters';
+
+  @override
+  String get doesNotMatch => 'Does not match';
+
+  @override
+  String get passwordUpdated => 'Password updated';
+
+  @override
+  String get appVersion => 'Zentory v1.0.0';
 }

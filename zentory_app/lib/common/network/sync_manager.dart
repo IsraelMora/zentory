@@ -2,12 +2,12 @@
 import 'package:injectable/injectable.dart';
 import 'package:zentory_app/common/network/connectivity_bloc.dart';
 import 'package:zentory_app/common/utils/logger.dart';
-import 'package:zentory_app/features/inventory/data/datasources/inventory_local_data_source.dart';
-import 'package:zentory_app/features/inventory/data/datasources/inventory_remote_data_source.dart';
-import 'package:zentory_app/features/inventory/data/datasources/movement_local_data_source.dart';
-import 'package:zentory_app/features/inventory/data/datasources/movement_remote_data_source.dart';
-import 'package:zentory_app/features/inventory/domain/entities/product.dart';
-import 'package:zentory_app/features/inventory/domain/entities/movement.dart';
+import 'package:zentory_app/data/datasources/inventory_local_data_source.dart';
+import 'package:zentory_app/data/datasources/inventory_remote_data_source.dart';
+import 'package:zentory_app/data/datasources/movement_local_data_source.dart';
+import 'package:zentory_app/data/datasources/movement_remote_data_source.dart';
+import 'package:zentory_app/domain/entities/product.dart';
+import 'package:zentory_app/domain/entities/movement.dart';
 
 @lazySingleton
 class SyncManager {

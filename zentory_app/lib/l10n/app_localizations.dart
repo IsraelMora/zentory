@@ -678,6 +678,84 @@ abstract class L10n {
   /// In es, this message translates to:
   /// **'••••••••'**
   String get passwordPlaceholder;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In es, this message translates to:
+  /// **'Bienvenido'**
+  String get welcomeBack;
+
+  /// No description provided for @joinZentory.
+  ///
+  /// In es, this message translates to:
+  /// **'Únete a Zentory'**
+  String get joinZentory;
+
+  /// No description provided for @manageEverything.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestiona todo desde un solo lugar.'**
+  String get manageEverything;
+
+  /// No description provided for @createAccountInSeconds.
+  ///
+  /// In es, this message translates to:
+  /// **'Crea tu cuenta en segundos.'**
+  String get createAccountInSeconds;
+
+  /// No description provided for @dontHaveAccount.
+  ///
+  /// In es, this message translates to:
+  /// **'¿No tienes cuenta?'**
+  String get dontHaveAccount;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Ya tienes una cuenta?'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @signUp.
+  ///
+  /// In es, this message translates to:
+  /// **'Regístrate'**
+  String get signUp;
+
+  /// No description provided for @logIn.
+  ///
+  /// In es, this message translates to:
+  /// **'Inicia Sesión'**
+  String get logIn;
+
+  /// No description provided for @fieldRequired.
+  ///
+  /// In es, this message translates to:
+  /// **'Campo requerido'**
+  String get fieldRequired;
+
+  /// No description provided for @minCharacters.
+  ///
+  /// In es, this message translates to:
+  /// **'Mínimo 8 caracteres'**
+  String get minCharacters;
+
+  /// No description provided for @doesNotMatch.
+  ///
+  /// In es, this message translates to:
+  /// **'No coincide'**
+  String get doesNotMatch;
+
+  /// No description provided for @passwordUpdated.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraseña actualizada'**
+  String get passwordUpdated;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In es, this message translates to:
+  /// **'Zentory v1.0.0'**
+  String get appVersion;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

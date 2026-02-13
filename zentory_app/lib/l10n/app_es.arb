@@ -96,5 +96,18 @@
   "createAccount": "Crear Cuenta",
   "fullNameHint": "Ej. Juan Pérez",
   "emailPlaceholder": "nombre@ejemplo.com",
-  "passwordPlaceholder": "••••••••"
+  "passwordPlaceholder": "••••••••",
+  "welcomeBack": "Bienvenido",
+  "joinZentory": "Únete a Zentory",
+  "manageEverything": "Gestiona todo desde un solo lugar.",
+  "createAccountInSeconds": "Crea tu cuenta en segundos.",
+  "dontHaveAccount": "¿No tienes cuenta?",
+  "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+  "signUp": "Regístrate",
+  "logIn": "Inicia Sesión",
+  "fieldRequired": "Campo requerido",
+  "minCharacters": "Mínimo 8 caracteres",
+  "doesNotMatch": "No coincide",
+  "passwordUpdated": "Contraseña actualizada",
+  "appVersion": "Zentory v1.0.0"
 }

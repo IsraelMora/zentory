@@ -304,4 +304,43 @@ class L10nEs extends L10n {
 
   @override
   String get passwordPlaceholder => '••••••••';
+
+  @override
+  String get welcomeBack => 'Bienvenido';
+
+  @override
+  String get joinZentory => 'Únete a Zentory';
+
+  @override
+  String get manageEverything => 'Gestiona todo desde un solo lugar.';
+
+  @override
+  String get createAccountInSeconds => 'Crea tu cuenta en segundos.';
+
+  @override
+  String get dontHaveAccount => '¿No tienes cuenta?';
+
+  @override
+  String get alreadyHaveAccount => '¿Ya tienes una cuenta?';
+
+  @override
+  String get signUp => 'Regístrate';
+
+  @override
+  String get logIn => 'Inicia Sesión';
+
+  @override
+  String get fieldRequired => 'Campo requerido';
+
+  @override
+  String get minCharacters => 'Mínimo 8 caracteres';
+
+  @override
+  String get doesNotMatch => 'No coincide';
+
+  @override
+  String get passwordUpdated => 'Contraseña actualizada';
+
+  @override
+  String get appVersion => 'Zentory v1.0.0';
 }
