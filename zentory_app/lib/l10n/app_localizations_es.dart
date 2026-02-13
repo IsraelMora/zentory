@@ -343,4 +343,8 @@ class L10nEs extends L10n {
 
   @override
   String get appVersion => 'Zentory v1.0.0';
+
+  @override
+  String get connectionError =>
+      'No pudimos conectar con el servidor. Verifica tu conexión e intenta nuevamente.';
 }

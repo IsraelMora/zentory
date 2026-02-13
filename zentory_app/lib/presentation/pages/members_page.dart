@@ -4,13 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
 import 'package:zentory_app/core/di/injection.dart';
-import 'package:zentory_app/common/widgets/zentory_empty_state.dart';
-import 'package:zentory_app/common/widgets/zentory_dialogs.dart';
+import 'package:zentory_app/presentation/widgets/zentory_empty_state.dart';
+import 'package:zentory_app/presentation/widgets/zentory_dialogs.dart';
+import 'package:zentory_app/presentation/widgets/zentory_card.dart';
+import 'package:zentory_app/presentation/widgets/zentory_badge.dart';
 import 'package:zentory_app/core/workspace_role.dart';
 import 'package:zentory_app/presentation/blocs/members_bloc.dart';
 import 'package:zentory_app/l10n/app_localizations.dart';
-
-import 'package:zentory_app/presentation/widgets/cards/member_card.dart';
+import 'package:zentory_app/domain/entities/member.dart';
 
 @RoutePage()
 class MembersPage extends StatelessWidget {
@@ -47,7 +48,7 @@ class MembersPage extends StatelessWidget {
                   padding: EdgeInsets.all(AppDesign.paddingM),
                   itemCount: members.length,
                   itemBuilder: (context, index) {
-                    return MemberCard(member: members[index]);
+                    return _buildMemberCard(context, members[index]);
                   },
                 );
               },
@@ -140,5 +141,51 @@ class MembersPage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget _buildMemberCard(BuildContext context, MemberEntity member) {
+    return ZentoryCard(
+      margin: EdgeInsets.only(bottom: AppDesign.spaceS),
+      padding: EdgeInsets.zero,
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: AppDesign.paddingM,
+          vertical: AppDesign.paddingS,
+        ),
+        leading: CircleAvatar(
+          backgroundColor:
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+          child: Text(
+            member.name.substring(0, 1).toUpperCase(),
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+          ),
+        ),
+        title: Text(
+          member.name,
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+        subtitle: Text(member.email),
+        trailing: ZentoryBadge(
+          label: member.role,
+          color: _getRoleColor(member.role),
+        ),
+      ),
+    );
+  }
+
+  Color _getRoleColor(String role) {
+    switch (role.toLowerCase()) {
+      case 'administrador':
+      case 'propietario':
+        return AppDesign.accent;
+      case 'editor':
+        return AppDesign.info;
+      case 'lector':
+        return AppDesign.secondary;
+      default:
+        return AppDesign.success;
+    }
   }
 }

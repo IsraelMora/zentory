@@ -6,9 +6,7 @@ class ZentoryCard extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final VoidCallback? onTap;
-  final BorderRadius? borderRadius;
   final Color? color;
-  final bool showBorder;
 
   const ZentoryCard({
     super.key,
@@ -16,15 +14,11 @@ class ZentoryCard extends StatelessWidget {
     this.padding,
     this.margin,
     this.onTap,
-    this.borderRadius,
     this.color,
-    this.showBorder = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBorderRadius = borderRadius ?? AppDesign.borderMedium;
-
     Widget content = Padding(
       padding: padding ?? EdgeInsets.all(AppDesign.paddingM),
       child: child,
@@ -33,7 +27,7 @@ class ZentoryCard extends StatelessWidget {
     if (onTap != null) {
       content = InkWell(
         onTap: onTap,
-        borderRadius: effectiveBorderRadius,
+        borderRadius: AppDesign.borderMedium,
         child: content,
       );
     }
@@ -43,10 +37,8 @@ class ZentoryCard extends StatelessWidget {
       margin: margin,
       color: color ?? Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
-        borderRadius: effectiveBorderRadius,
-        side: showBorder
-            ? BorderSide(color: Theme.of(context).dividerColor)
-            : BorderSide.none,
+        borderRadius: AppDesign.borderMedium,
+        side: BorderSide(color: Theme.of(context).dividerColor),
       ),
       child: content,
     );

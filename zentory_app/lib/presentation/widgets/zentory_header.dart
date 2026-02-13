@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:sizer/sizer.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
 import 'package:zentory_app/core/router/router.gr.dart';
+import 'package:zentory_app/l10n/app_localizations.dart';
 
 class ZentoryHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -65,7 +66,7 @@ class ZentoryHeader extends StatelessWidget implements PreferredSizeWidget {
                           LucideIcons.bell,
                           size: AppDesign.fontXL,
                         ),
-                        tooltip: 'Notificaciones',
+                        tooltip: L10n.of(context)!.notifications,
                       ),
                       if (actions != null && actions!.isNotEmpty)
                         SizedBox(width: AppDesign.spaceS),

@@ -1,18 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
 import 'package:zentory_app/core/router/router.gr.dart';
-import 'package:zentory_app/common/widgets/zentory_header.dart';
-import 'package:zentory_app/common/widgets/zentory_icon_container.dart';
-import 'package:zentory_app/common/widgets/zentory_dialogs.dart';
-import 'package:zentory_app/common/widgets/zentory_feedback.dart';
+import 'package:zentory_app/presentation/widgets/zentory_header.dart';
+import 'package:zentory_app/presentation/widgets/zentory_icon_container.dart';
+import 'package:zentory_app/presentation/widgets/zentory_dialogs.dart';
+import 'package:zentory_app/presentation/widgets/zentory_feedback.dart';
+import 'package:zentory_app/presentation/widgets/zentory_card.dart';
 import 'package:zentory_app/presentation/blocs/auth_bloc.dart';
 import 'package:zentory_app/l10n/app_localizations.dart';
 import 'package:zentory_app/presentation/blocs/settings_bloc.dart';
-import 'package:zentory_app/presentation/widgets/lists/action_tile.dart';
 
 @RoutePage()
 class ProfilePage extends StatelessWidget {
@@ -70,34 +71,39 @@ class ProfilePage extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 SizedBox(height: AppDesign.spaceXL),
-                ActionTile(
+                _buildActionTile(
+                  context,
                   icon: LucideIcons.user,
                   label: l10n.editName,
                   onTap: () {
                     _showEditNameDialog(context, user.name);
                   },
                 ),
-                ActionTile(
+                _buildActionTile(
+                  context,
                   icon: LucideIcons.lock,
                   label: l10n.changePassword,
                   onTap: () {
                     _showChangePasswordDialog(context);
                   },
                 ),
-                ActionTile(
+                _buildActionTile(
+                  context,
                   icon: LucideIcons.bell,
                   label: l10n.notifications,
                   onTap: () {
                     context.router.push(const NotificationsRoute());
                   },
                 ),
-                ActionTile(
+                _buildActionTile(
+                  context,
                   icon: LucideIcons.palette,
                   label: l10n.themeAndAppearance,
                   onTap: () => _showThemeSelectionDialog(context),
                 ),
                 SizedBox(height: AppDesign.spaceL),
-                ActionTile(
+                _buildActionTile(
+                  context,
                   icon: LucideIcons.logOut,
                   label: l10n.logout,
                   textColor: Theme.of(context).colorScheme.error,
@@ -310,6 +316,43 @@ class ProfilePage extends StatelessWidget {
       onConfirm: () {
         context.read<AuthBloc>().add(const AuthEvent.logoutRequested());
       },
+    );
+  }
+
+  Widget _buildActionTile(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    Color? textColor,
+  }) {
+    return ZentoryCard(
+      margin: EdgeInsets.only(bottom: AppDesign.spaceS),
+      padding: EdgeInsets.zero,
+      onTap: () {
+        HapticFeedback.lightImpact();
+        onTap();
+      },
+      child: ListTile(
+        leading: Icon(
+          icon,
+          color: Theme.of(context).colorScheme.onSurface,
+          size: AppDesign.fontL,
+        ),
+        title: Text(
+          label,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: textColor,
+                fontWeight: FontWeight.normal,
+                fontSize: AppDesign.fontM,
+              ),
+        ),
+        trailing: Icon(
+          LucideIcons.chevronRight,
+          size: AppDesign.fontS,
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+      ),
     );
   }
 }

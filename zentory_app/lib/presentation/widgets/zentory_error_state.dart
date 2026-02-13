@@ -1,7 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
-import 'package:zentory_app/common/widgets/zentory_icon_container.dart';
+import 'package:zentory_app/presentation/widgets/zentory_icon_container.dart';
 
 import 'package:zentory_app/l10n/app_localizations.dart';
 

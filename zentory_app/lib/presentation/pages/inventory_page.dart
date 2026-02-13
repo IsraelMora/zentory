@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,17 +9,18 @@ import 'package:reactive_forms/reactive_forms.dart';
 import 'package:zentory_app/core/di/injection.dart';
 import 'package:zentory_app/core/product_category.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
-import 'package:zentory_app/common/widgets/zentory_feedback.dart';
-import 'package:zentory_app/common/widgets/zentory_dialogs.dart';
-import 'package:zentory_app/common/widgets/zentory_shimmer.dart';
-import 'package:zentory_app/common/widgets/zentory_error_state.dart';
-import 'package:zentory_app/common/widgets/zentory_empty_state.dart';
-import 'package:zentory_app/common/widgets/zentory_header.dart';
+import 'package:zentory_app/presentation/widgets/zentory_feedback.dart';
+import 'package:zentory_app/presentation/widgets/zentory_dialogs.dart';
+import 'package:zentory_app/presentation/widgets/zentory_shimmer.dart';
+import 'package:zentory_app/presentation/widgets/zentory_error_state.dart';
+import 'package:zentory_app/presentation/widgets/zentory_empty_state.dart';
+import 'package:zentory_app/presentation/widgets/zentory_header.dart';
+import 'package:zentory_app/presentation/widgets/zentory_card.dart';
+import 'package:zentory_app/presentation/widgets/zentory_badge.dart';
+import 'package:zentory_app/common/utils/extensions.dart';
 import 'package:zentory_app/data/models/product_form_model.dart';
 import 'package:zentory_app/domain/entities/product.dart';
 import 'package:zentory_app/presentation/blocs/inventory_bloc.dart';
-import 'package:zentory_app/presentation/widgets/cards/product_card.dart';
-import 'package:zentory_app/presentation/widgets/lists/filter_chips.dart';
 import 'package:zentory_app/l10n/app_localizations.dart';
 
 @RoutePage()
@@ -635,7 +637,8 @@ class _InventoryPageState extends State<InventoryPage> {
                         },
                         child: Column(
                           children: [
-                            FilterChips(
+                            _buildFilterChips(
+                              context: context,
                               items: categories,
                               selectedItem: selectedCategory,
                               allLabel: l10n.all,
@@ -671,7 +674,8 @@ class _InventoryPageState extends State<InventoryPage> {
                                       );
                                     }
                                     final product = filteredProducts[index];
-                                    return ProductCard(
+                                    return _buildProductCard(
+                                      context: context,
                                       product: product,
                                       onTap: () => _showEditProductDialog(
                                         context,
@@ -749,6 +753,184 @@ class _InventoryPageState extends State<InventoryPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildProductCard({
+    required BuildContext context,
+    required ProductEntity product,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+
+    return ZentoryCard(
+      onTap: onTap,
+      margin: EdgeInsets.only(bottom: AppDesign.spaceS),
+      child: Row(
+        children: [
+          _buildProductImage(context, product.imageUrl),
+          SizedBox(width: AppDesign.spaceM),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.name,
+                  style: theme.textTheme.titleLarge,
+                ),
+                if (product.description.isNotEmpty) ...[
+                  SizedBox(height: AppDesign.spaceXS),
+                  Text(
+                    product.description,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                ],
+                SizedBox(height: AppDesign.spaceS),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildPriceAndCategory(
+                      context,
+                      product.price,
+                      product.category,
+                    ),
+                    _buildStockBadge(context: context, stock: product.stock),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProductImage(BuildContext context, String? imageUrl) {
+    final hasImage = imageUrl != null && imageUrl.isNotEmpty;
+    // Use AspectRatio and spacing-based width
+    return SizedBox(
+      width: AppDesign.paddingXL, // Driven by tokens
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            borderRadius: AppDesign.borderSmall,
+            image: hasImage
+                ? DecorationImage(
+                    image: CachedNetworkImageProvider(imageUrl),
+                    fit: BoxFit.cover,
+                  )
+                : null,
+          ),
+          child: !hasImage
+              ? Icon(
+                  LucideIcons.image,
+                  color: Theme.of(context).colorScheme.secondary,
+                )
+              : null,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPriceAndCategory(
+    BuildContext context,
+    double price,
+    String category,
+  ) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          price.toCurrency(),
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: theme.colorScheme.primary,
+          ),
+        ),
+        SizedBox(height: AppDesign.spaceXS),
+        ZentoryBadge(
+          label: category,
+          color: theme.colorScheme.secondary,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStockBadge({
+    required BuildContext context,
+    required int stock,
+  }) {
+    final isLowStock = stock < 5;
+    final color = isLowStock
+        ? Theme.of(context).colorScheme.error
+        : Theme.of(context).colorScheme.primary;
+
+    return ZentoryBadge(
+      label: 'Stock: $stock',
+      color: color,
+      icon: isLowStock ? LucideIcons.circleAlert : LucideIcons.check,
+    );
+  }
+
+  Widget _buildFilterChips({
+    required BuildContext context,
+    required List<String> items,
+    required String? selectedItem,
+    required String allLabel,
+    required ValueChanged<String?> onSelected,
+  }) {
+    final allItems = [allLabel, ...items.where((i) => i != allLabel)];
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.symmetric(
+        horizontal: AppDesign.paddingM,
+        vertical: AppDesign.spaceXS,
+      ),
+      child: Row(
+        children: allItems.asMap().entries.map((entry) {
+          final index = entry.key;
+          final item = entry.value;
+          final isSelected = item == selectedItem ||
+              (selectedItem == null && item == allLabel);
+
+          return Padding(
+            padding: EdgeInsets.only(
+              right: index == allItems.length - 1 ? 0 : AppDesign.paddingS,
+            ),
+            child: FilterChip(
+              label: Text(item),
+              selected: isSelected,
+              onSelected: (selected) {
+                HapticFeedback.selectionClick();
+                onSelected(item == allLabel ? null : item);
+              },
+              backgroundColor: Theme.of(context).cardColor,
+              selectedColor:
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              checkmarkColor: Theme.of(context).colorScheme.primary,
+              labelStyle: TextStyle(
+                color: isSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).textTheme.bodyMedium?.color,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: AppDesign.borderLarge,
+                side: BorderSide(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).dividerColor,
+                ),
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

@@ -756,6 +756,12 @@ abstract class L10n {
   /// In es, this message translates to:
   /// **'Zentory v1.0.0'**
   String get appVersion;
+
+  /// No description provided for @connectionError.
+  ///
+  /// In es, this message translates to:
+  /// **'No pudimos conectar con el servidor. Verifica tu conexión e intenta nuevamente.'**
+  String get connectionError;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

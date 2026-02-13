@@ -10,7 +10,7 @@ import 'package:zentory_app/common/network/sync_manager.dart';
 import 'package:zentory_app/core/router/router.dart';
 import 'package:zentory_app/core/theme/app_theme.dart';
 import 'package:zentory_app/common/utils/validation_messages.dart';
-import 'package:zentory_app/common/widgets/offline_banner.dart';
+import 'package:zentory_app/presentation/widgets/offline_banner.dart';
 import 'package:zentory_app/core/router/auth_guard.dart';
 import 'package:zentory_app/presentation/blocs/auth_bloc.dart';
 import 'package:zentory_app/presentation/blocs/settings_bloc.dart';

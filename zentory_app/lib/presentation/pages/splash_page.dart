@@ -41,23 +41,7 @@ class _SplashPageState extends State<SplashPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: AppDesign.paddingXL,
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      LucideIcons.package,
-                      size: AppDesign.fontDisplay,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                ),
-              ),
+              _buildLogo(context),
               SizedBox(height: AppDesign.spaceL),
               Text(
                 'ZENTORY',
@@ -70,6 +54,26 @@ class _SplashPageState extends State<SplashPage> {
               SizedBox(height: AppDesign.spaceXL),
               const CircularProgressIndicator(),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLogo(BuildContext context) {
+    return SizedBox(
+      width: AppDesign.paddingXL,
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            LucideIcons.package,
+            size: AppDesign.fontDisplay,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ),

@@ -4,16 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
 import 'package:zentory_app/core/di/injection.dart';
-import 'package:zentory_app/common/widgets/zentory_feedback.dart';
-import 'package:zentory_app/common/widgets/zentory_error_state.dart';
-import 'package:zentory_app/common/widgets/zentory_empty_state.dart';
-import 'package:zentory_app/common/widgets/zentory_dialogs.dart';
-import 'package:zentory_app/common/widgets/zentory_header.dart';
+import 'package:zentory_app/presentation/widgets/zentory_feedback.dart';
+import 'package:zentory_app/presentation/widgets/zentory_error_state.dart';
+import 'package:zentory_app/presentation/widgets/zentory_empty_state.dart';
+import 'package:zentory_app/presentation/widgets/zentory_dialogs.dart';
+import 'package:zentory_app/presentation/widgets/zentory_header.dart';
+import 'package:zentory_app/presentation/widgets/zentory_card.dart';
+import 'package:zentory_app/presentation/widgets/zentory_icon_container.dart';
 import 'package:zentory_app/presentation/blocs/auth_bloc.dart';
 import 'package:zentory_app/presentation/blocs/workspaces_bloc.dart';
-
-import 'package:zentory_app/presentation/widgets/cards/workspace_card.dart';
 import 'package:zentory_app/l10n/app_localizations.dart';
+import 'package:zentory_app/core/router/router.gr.dart';
 
 @RoutePage()
 class WorkspacesPage extends StatelessWidget {
@@ -55,8 +56,7 @@ class WorkspacesPage extends StatelessWidget {
                             final l10n = L10n.of(context)!;
                             return ZentoryErrorState(
                               title: l10n.errorLoadingWorkspaces,
-                              message:
-                                  'No pudimos conectar con el servidor. Verifica tu conexión e intenta nuevamente.',
+                              message: l10n.connectionError,
                               icon: LucideIcons.serverCrash,
                               onRetry: () {
                                 workspacesBloc.add(
@@ -81,8 +81,9 @@ class WorkspacesPage extends StatelessWidget {
                                 separatorBuilder: (context, index) =>
                                     SizedBox(height: AppDesign.spaceS),
                                 itemBuilder: (context, index) {
-                                  return WorkspaceCard(
-                                    workspace: workspaces[index],
+                                  return _buildWorkspaceCard(
+                                    context,
+                                    workspaces[index],
                                   );
                                 },
                               ),
@@ -182,6 +183,51 @@ class WorkspacesPage extends StatelessWidget {
       icon: LucideIcons.layoutGrid,
       actionLabel: l10n.createWorkspace,
       onAction: () => _showCreateWorkspaceDialog(context, bloc),
+    );
+  }
+
+  Widget _buildWorkspaceCard(BuildContext context, dynamic workspace) {
+    return ZentoryCard(
+      onTap: () {
+        context.router.push(
+          WorkspaceShellRoute(
+            workspaceId: workspace.id,
+            workspaceName: workspace.name,
+          ),
+        );
+      },
+      child: Row(
+        children: [
+          ZentoryIconContainer(
+            icon: LucideIcons.layoutGrid,
+            padding: AppDesign.paddingS,
+            size: AppDesign.fontXL,
+            isCircle: false,
+          ),
+          SizedBox(width: AppDesign.spaceM),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  workspace.name,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                SizedBox(height: AppDesign.spaceXS),
+                Text(
+                  '${workspace.memberIds.length} ${L10n.of(context)!.members}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+          Icon(
+            LucideIcons.chevronRight,
+            color: Theme.of(context).colorScheme.secondary,
+            size: AppDesign.fontL,
+          ),
+        ],
+      ),
     );
   }
 }

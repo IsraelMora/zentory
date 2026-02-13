@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'package:zentory_app/common/widgets/zentory_header.dart';
-import 'package:zentory_app/common/widgets/zentory_empty_state.dart';
+import 'package:zentory_app/presentation/widgets/zentory_header.dart';
+import 'package:zentory_app/presentation/widgets/zentory_empty_state.dart';
 import 'package:zentory_app/l10n/app_localizations.dart';
 
 @RoutePage()

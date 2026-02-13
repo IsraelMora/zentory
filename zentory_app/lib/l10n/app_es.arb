@@ -109,5 +109,6 @@
   "minCharacters": "Mínimo 8 caracteres",
   "doesNotMatch": "No coincide",
   "passwordUpdated": "Contraseña actualizada",
-  "appVersion": "Zentory v1.0.0"
+  "appVersion": "Zentory v1.0.0",
+  "connectionError": "No pudimos conectar con el servidor. Verifica tu conexión e intenta nuevamente."
 }
