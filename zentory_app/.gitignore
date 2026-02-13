@@ -46,3 +46,13 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
+# Project specific
+pubspec.lock
+
+# Generated code
+*.g.dart
+*.freezed.dart
+*.config.dart
+*.injectable.dart
+*.gr.dart

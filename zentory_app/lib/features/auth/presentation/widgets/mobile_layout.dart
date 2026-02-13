@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-import 'package:zentory_app/core/theme/app_design.dart';
 
-import 'login_form.dart';
+import 'package:zentory_app/core/theme/app_design.dart';
+import 'package:zentory_app/features/auth/presentation/widgets/login_form.dart';
+import 'package:zentory_app/features/auth/presentation/models/auth_form_model.dart';
 import 'toggle_mode_button.dart';
 
 class MobileLayout extends StatelessWidget {
-  final FormGroup form;
+  final AuthFormModel formModel;
   final bool isLogin;
   final bool obscurePassword;
   final VoidCallback onToggleMode;
@@ -18,7 +18,7 @@ class MobileLayout extends StatelessWidget {
 
   const MobileLayout({
     super.key,
-    required this.form,
+    required this.formModel,
     required this.isLogin,
     required this.obscurePassword,
     required this.onToggleMode,
@@ -75,9 +75,10 @@ class MobileLayout extends StatelessWidget {
             ),
             SizedBox(height: AppDesign.spaceXL),
             LoginForm(
-              form: form,
+              formModel: formModel,
               isLogin: isLogin,
               obscurePassword: obscurePassword,
+              onToggleMode: onToggleMode,
               onToggleVisibility: onToggleVisibility,
               onSubmit: onSubmit,
               isLoading: isLoading,

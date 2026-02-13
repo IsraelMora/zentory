@@ -7,6 +7,7 @@ import 'package:zentory_app/core/widgets/zentory_ui_components.dart';
 import 'package:zentory_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:zentory_app/features/auth/presentation/widgets/desktop_layout.dart';
 import 'package:zentory_app/features/auth/presentation/widgets/mobile_layout.dart';
+import 'package:zentory_app/features/auth/presentation/models/auth_form_model.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
@@ -17,44 +18,40 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late FormGroup _form;
+  late AuthFormModel _formModel;
   bool _isLogin = true;
   bool _obscurePassword = true;
 
   @override
   void initState() {
     super.initState();
-    _form = FormGroup({
-      'email': FormControl<String>(validators: [
-        Validators.required,
-        Validators.email,
-      ]),
-      'password': FormControl<String>(validators: [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
-      'name': FormControl<String>(),
-    });
+    _formModel = AuthFormModel();
+
+    if (kDebugMode) {
+      _formModel.emailControl.value = 'isramora3@gmail.com';
+      _formModel.passwordControl.value = 'password123';
+    }
+
     _updateFormValidators();
   }
 
   void _updateFormValidators() {
     if (_isLogin) {
-      _form.control('name').clearValidators();
-      _form.control('name').updateValueAndValidity();
+      _formModel.nameControl.clearValidators();
+      _formModel.nameControl.updateValueAndValidity();
     } else {
-      _form.control('name').setValidators([
+      _formModel.nameControl.setValidators([
         Validators.required,
         Validators.minLength(3),
       ]);
-      _form.control('name').updateValueAndValidity();
+      _formModel.nameControl.updateValueAndValidity();
     }
   }
 
   void _submit(BuildContext context) {
-    if (_form.valid) {
-      final email = _form.control('email').value as String;
-      final password = _form.control('password').value as String;
+    if (_formModel.form.valid) {
+      final email = _formModel.emailControl.value!;
+      final password = _formModel.passwordControl.value!;
 
       if (_isLogin) {
         context.read<AuthBloc>().add(
@@ -64,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             );
       } else {
-        final name = _form.control('name').value as String;
+        final name = _formModel.nameControl.value!;
         context.read<AuthBloc>().add(
               AuthEvent.registerRequested(
                 name: name,
@@ -74,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
             );
       }
     } else {
-      _form.markAllAsTouched();
+      _formModel.form.markAllAsTouched();
     }
   }
 
@@ -99,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
 
             return kIsWeb || MediaQuery.of(context).size.width > 600
                 ? DesktopLayout(
-                    form: _form,
+                    formModel: _formModel,
                     isLogin: _isLogin,
                     obscurePassword: _obscurePassword,
                     onToggleMode: _toggleMode,
@@ -108,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                     isLoading: isLoading,
                   )
                 : MobileLayout(
-                    form: _form,
+                    formModel: _formModel,
                     isLogin: _isLogin,
                     obscurePassword: _obscurePassword,
                     onToggleMode: _toggleMode,
@@ -137,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _form.dispose();
+    _formModel.form.dispose();
     super.dispose();
   }
 }

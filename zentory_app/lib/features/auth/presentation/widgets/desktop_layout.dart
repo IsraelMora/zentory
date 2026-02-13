@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-import 'package:zentory_app/core/theme/app_design.dart';
 
-import 'login_form.dart';
+import 'package:zentory_app/core/theme/app_design.dart';
+import 'package:zentory_app/features/auth/presentation/widgets/login_form.dart';
+import 'package:zentory_app/features/auth/presentation/models/auth_form_model.dart';
+
 import 'toggle_mode_button.dart';
 
 class DesktopLayout extends StatelessWidget {
-  final FormGroup form;
-  final bool isLogin;
-  final bool obscurePassword;
-  final VoidCallback onToggleMode;
-  final VoidCallback onToggleVisibility;
-  final VoidCallback onSubmit;
-  final bool isLoading;
-
   const DesktopLayout({
     super.key,
-    required this.form,
+    required this.formModel,
     required this.isLogin,
     required this.obscurePassword,
     required this.onToggleMode,
@@ -26,6 +19,14 @@ class DesktopLayout extends StatelessWidget {
     required this.onSubmit,
     required this.isLoading,
   });
+
+  final AuthFormModel formModel;
+  final bool isLogin;
+  final bool obscurePassword;
+  final VoidCallback onToggleMode;
+  final VoidCallback onToggleVisibility;
+  final VoidCallback onSubmit;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,10 @@ class DesktopLayout extends StatelessWidget {
                     width: 400,
                     height: 400,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.05),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onPrimary
+                          .withOpacity(0.05),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -67,7 +71,10 @@ class DesktopLayout extends StatelessWidget {
                     width: 300,
                     height: 300,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.05),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onPrimary
+                          .withOpacity(0.05),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -79,7 +86,7 @@ class DesktopLayout extends StatelessWidget {
                       Icon(
                         LucideIcons.package,
                         size: AppDesign.fontDisplay * 2,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onPrimary,
                       )
                           .animate()
                           .fade()
@@ -87,12 +94,14 @@ class DesktopLayout extends StatelessWidget {
                       SizedBox(height: AppDesign.spaceL),
                       Text(
                         'Zentory',
-                        style:
-                            Theme.of(context).textTheme.displayLarge?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: AppDesign.fontDisplay * 1.5,
-                                ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayLarge
+                            ?.copyWith(
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: AppDesign.fontDisplay * 1.5,
+                            ),
                       )
                           .animate()
                           .fade(delay: 200.ms)
@@ -103,7 +112,10 @@ class DesktopLayout extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style:
                             Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  color: Colors.white.withValues(alpha: 0.9),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimary
+                                      .withValues(alpha: 0.9),
                                   height: 1.5,
                                 ),
                       ).animate().fade(delay: 400.ms),
@@ -147,9 +159,10 @@ class DesktopLayout extends StatelessWidget {
                     ).animate().fade(delay: 100.ms),
                     SizedBox(height: AppDesign.spaceXL * 1.5),
                     LoginForm(
-                      form: form,
+                      formModel: formModel,
                       isLogin: isLogin,
                       obscurePassword: obscurePassword,
+                      onToggleMode: onToggleMode,
                       onToggleVisibility: onToggleVisibility,
                       onSubmit: onSubmit,
                       isLoading: isLoading,

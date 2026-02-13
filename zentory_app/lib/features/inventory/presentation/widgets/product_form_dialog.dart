@@ -10,6 +10,7 @@ import 'package:zentory_app/core/theme/app_design.dart';
 import 'package:zentory_app/core/widgets/zentory_ui_components.dart';
 import 'package:zentory_app/features/inventory/domain/entities/product.dart';
 import 'package:zentory_app/features/inventory/presentation/bloc/inventory_bloc.dart';
+import 'package:zentory_app/features/inventory/presentation/models/product_form_model.dart';
 
 class ProductFormDialog extends StatefulWidget {
   final ProductEntity? product;
@@ -30,7 +31,7 @@ class ProductFormDialog extends StatefulWidget {
 }
 
 class _ProductFormDialogState extends State<ProductFormDialog> {
-  late FormGroup _form;
+  late ProductFormModel _formModel;
   String? _imageUrl;
   bool _isUploading = false;
   final ImagePicker _picker = ImagePicker();
@@ -49,25 +50,13 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
     super.initState();
     _imageUrl = widget.product?.imageUrl;
 
-    _form = FormGroup({
-      'name': FormControl<String>(
-        value: widget.product?.name,
-        validators: [Validators.required, Validators.minLength(3)],
-      ),
-      'description': FormControl<String>(value: widget.product?.description),
-      'price': FormControl<double>(
-        value: widget.product?.price,
-        validators: [Validators.required, Validators.min(0)],
-      ),
-      'stock': FormControl<int>(
-        value: widget.product?.stock,
-        validators: [Validators.required, Validators.min(0)],
-      ),
-      'category': FormControl<String>(
-        value: widget.product?.category ?? 'General',
-        validators: [Validators.required],
-      ),
-    });
+    _formModel = ProductFormModel(
+      name: widget.product?.name ?? '',
+      description: widget.product?.description ?? '',
+      price: widget.product?.price ?? 0.0,
+      stock: widget.product?.stock ?? 0,
+      category: widget.product?.category ?? 'General',
+    );
 
     if (widget.product?.category != null &&
         !_categories.contains(widget.product!.category)) {
@@ -119,7 +108,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
           padding: EdgeInsets.all(AppDesign.paddingL),
           constraints: const BoxConstraints(maxWidth: 400),
           child: ReactiveForm(
-            formGroup: _form,
+            formGroup: _formModel.form,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -209,7 +198,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                   ),
                   SizedBox(height: AppDesign.spaceL),
                   ReactiveTextField<String>(
-                    formControlName: 'name',
+                    formControl: _formModel.nameControl,
                     decoration: InputDecoration(
                       labelText: 'Nombre del producto',
                       prefixIcon: Icon(
@@ -217,15 +206,10 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                         size: AppDesign.fontL,
                       ),
                     ),
-                    validationMessages: {
-                      ValidationMessage.required: (error) => 'Obligatorio',
-                      ValidationMessage.minLength: (error) =>
-                          'Mínimo 3 caracteres',
-                    },
                   ),
                   SizedBox(height: AppDesign.spaceM),
                   ReactiveTextField<String>(
-                    formControlName: 'description',
+                    formControl: _formModel.descriptionControl,
                     maxLines: 2,
                     decoration: InputDecoration(
                       labelText: 'Descripción (opcional)',
@@ -237,7 +221,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                     children: [
                       Expanded(
                         child: ReactiveTextField<double>(
-                          formControlName: 'price',
+                          formControl: _formModel.priceControl,
                           decoration: InputDecoration(
                             labelText: 'Precio',
                             prefixIcon: Icon(
@@ -248,37 +232,25 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
                           ),
-                          validationMessages: {
-                            ValidationMessage.required: (error) =>
-                                'Obligatorio',
-                            ValidationMessage.min: (error) => 'No negativo',
-                            ValidationMessage.number: (error) => 'Inválido',
-                          },
                         ),
                       ),
                       SizedBox(width: AppDesign.spaceM),
                       Expanded(
                         child: ReactiveTextField<int>(
-                          formControlName: 'stock',
+                          formControl: _formModel.stockControl,
                           decoration: InputDecoration(
                             labelText: 'Stock',
                             prefixIcon:
                                 Icon(LucideIcons.hash, size: AppDesign.fontL),
                           ),
                           keyboardType: TextInputType.number,
-                          validationMessages: {
-                            ValidationMessage.required: (error) =>
-                                'Obligatorio',
-                            ValidationMessage.min: (error) => 'No negativo',
-                            ValidationMessage.number: (error) => 'Inválido',
-                          },
                         ),
                       ),
                     ],
                   ),
                   SizedBox(height: AppDesign.spaceM),
                   ReactiveDropdownField<String>(
-                    formControlName: 'category',
+                    formControl: _formModel.categoryControl,
                     decoration: InputDecoration(
                       labelText: 'Categoría',
                       prefixIcon: Icon(LucideIcons.tag, size: AppDesign.fontL),
@@ -293,25 +265,24 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                   SizedBox(height: AppDesign.spaceXL),
                   ElevatedButton(
                     onPressed: () {
-                      if (_form.valid) {
+                      if (_formModel.form.valid) {
                         HapticFeedback.heavyImpact();
                         final product = ProductEntity(
                           id: widget.product?.id ?? '',
                           workspaceId: widget.workspaceId,
-                          name: _form.control('name').value as String,
+                          name: _formModel.nameControl.value!,
                           description:
-                              _form.control('description').value as String? ??
-                                  '',
-                          price: _form.control('price').value as double,
-                          stock: _form.control('stock').value as int,
+                              _formModel.descriptionControl.value ?? '',
+                          price: _formModel.priceControl.value!,
+                          stock: _formModel.stockControl.value!,
                           imageUrl: _imageUrl,
                           sku: widget.product?.sku ?? '',
-                          category: _form.control('category').value as String,
+                          category: _formModel.categoryControl.value!,
                         );
                         widget.onSave(product);
                         Navigator.pop(context);
                       } else {
-                        _form.markAllAsTouched();
+                        _formModel.form.markAllAsTouched();
                         HapticFeedback.vibrate();
                       }
                     },
@@ -389,7 +360,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
 
   @override
   void dispose() {
-    _form.dispose();
+    _formModel.form.dispose();
     super.dispose();
   }
 }

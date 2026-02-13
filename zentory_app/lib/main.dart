@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 import 'package:sizer/sizer.dart';
 import 'package:zentory_app/l10n/app_localizations.dart';
 import 'package:zentory_app/core/di/injection.dart';
@@ -65,9 +66,12 @@ class _MyAppState extends State<MyApp> {
                       'Navigation Guard: Auth state changed to $authState');
 
                   final currentRoute = _appRouter.currentPath;
-                  final isLoginOrSplash = currentRoute == '/login' ||
-                      currentRoute == '/splash' ||
+                  final isLoginOrSplash = currentRoute.startsWith('/login') ||
+                      currentRoute.startsWith('/splash') ||
                       currentRoute == '/';
+
+                  ZentoryLogger.debug(
+                      'Navigation Guard: currentRoute: $currentRoute, isLoginOrSplash: $isLoginOrSplash');
 
                   authState.maybeWhen(
                     authenticated: (_) {
@@ -78,7 +82,7 @@ class _MyAppState extends State<MyApp> {
                       }
                     },
                     unauthenticated: () {
-                      if (!isLoginOrSplash) {
+                      if (!currentRoute.startsWith('/login')) {
                         ZentoryLogger.info(
                             'Global Navigation: Unauthenticated, redirecting to Login');
                         _appRouter.replaceAll([const LoginRoute()]);
@@ -87,29 +91,59 @@ class _MyAppState extends State<MyApp> {
                     orElse: () {},
                   );
                 },
-                child: MaterialApp.router(
-                  title: 'Zentory',
-                  debugShowCheckedModeBanner: false,
-                  theme: AppTheme.light,
-                  darkTheme: AppTheme.dark,
-                  themeMode: themeMode,
-                  routerConfig: _appRouter.config(),
-                  localizationsDelegates: [
-                    L10n.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                  ],
-                  supportedLocales: const [Locale('es'), Locale('en')],
-                  builder: (context, child) {
-                    return Column(
-                      children: [
-                        const OfflineBanner(),
-                        Expanded(child: child ?? const SizedBox.shrink()),
-                      ],
-                    );
+                child: ReactiveFormConfig(
+                  validationMessages: {
+                    ValidationMessage.required: (error) =>
+                        'Este campo es obligatorio',
+                    ValidationMessage.email: (error) =>
+                        'Debe ingresar un correo válido',
+                    ValidationMessage.minLength: (error) =>
+                        'Debe tener al menos ${(error as Map)['requiredLength']} caracteres',
+                    ValidationMessage.maxLength: (error) =>
+                        'Debe tener máximo ${(error as Map)['requiredLength']} caracteres',
+                    ValidationMessage.pattern: (error) =>
+                        'El formato no es válido',
+                    ValidationMessage.mustMatch: (error) =>
+                        'Los campos no coinciden',
+                    ValidationMessage.min: (error) =>
+                        'El valor debe ser mayor o igual a ${(error as Map)['min']}',
+                    ValidationMessage.max: (error) =>
+                        'El valor debe ser menor o igual a ${(error as Map)['max']}',
+                    ValidationMessage.number: (error) =>
+                        'Debe ingresar un número válido',
+                    ValidationMessage.creditCard: (error) =>
+                        'Debe ingresar una tarjeta de crédito válida',
+                    ValidationMessage.equals: (error) =>
+                        'El valor no coincide con el esperado',
+                    ValidationMessage.contains: (error) =>
+                        'El valor no está permitido',
+                    ValidationMessage.any: (error) =>
+                        'Al menos una opción debe ser válida',
                   },
+                  child: MaterialApp.router(
+                    title: 'Zentory',
+                    debugShowCheckedModeBanner: false,
+                    theme: AppTheme.light,
+                    darkTheme: AppTheme.dark,
+                    themeMode: themeMode,
+                    routerConfig: _appRouter.config(),
+                    localizationsDelegates: [
+                      L10n.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                    ],
+                    supportedLocales: const [Locale('es'), Locale('en')],
+                    builder: (context, child) {
+                      return Column(
+                        children: [
+                          const OfflineBanner(),
+                          Expanded(child: child ?? const SizedBox.shrink()),
+                        ],
+                      );
+                    },
+                  ),
                 ),
               );
             },
