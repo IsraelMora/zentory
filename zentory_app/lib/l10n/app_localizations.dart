@@ -109,6 +109,54 @@ abstract class L10n {
   /// **'Inventario'**
   String get inventory;
 
+  /// No description provided for @inventorySubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestión de Productos'**
+  String get inventorySubtitle;
+
+  /// No description provided for @products.
+  ///
+  /// In es, this message translates to:
+  /// **'Productos'**
+  String get products;
+
+  /// No description provided for @confirm.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmar'**
+  String get confirm;
+
+  /// No description provided for @cancel.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get cancel;
+
+  /// No description provided for @error.
+  ///
+  /// In es, this message translates to:
+  /// **'Error'**
+  String get error;
+
+  /// No description provided for @success.
+  ///
+  /// In es, this message translates to:
+  /// **'Éxito'**
+  String get success;
+
+  /// No description provided for @loading.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargando...'**
+  String get loading;
+
+  /// No description provided for @retry.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get retry;
+
   /// No description provided for @history.
   ///
   /// In es, this message translates to:
@@ -121,17 +169,71 @@ abstract class L10n {
   /// **'Equipo'**
   String get team;
 
+  /// No description provided for @teamSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Gestión de miembros'**
+  String get teamSubtitle;
+
   /// No description provided for @profile.
   ///
   /// In es, this message translates to:
   /// **'Perfil'**
   String get profile;
 
+  /// No description provided for @profileSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Ajustes de cuenta'**
+  String get profileSubtitle;
+
   /// No description provided for @dashboard.
   ///
   /// In es, this message translates to:
   /// **'Inicio'**
   String get dashboard;
+
+  /// No description provided for @dashboardSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Resumen general'**
+  String get dashboardSubtitle;
+
+  /// No description provided for @stockAlerts.
+  ///
+  /// In es, this message translates to:
+  /// **'Alertas de Stock'**
+  String get stockAlerts;
+
+  /// No description provided for @recentActivity.
+  ///
+  /// In es, this message translates to:
+  /// **'Actividad Reciente'**
+  String get recentActivity;
+
+  /// No description provided for @totalItems.
+  ///
+  /// In es, this message translates to:
+  /// **'Items Totales'**
+  String get totalItems;
+
+  /// No description provided for @totalStockValue.
+  ///
+  /// In es, this message translates to:
+  /// **'Valor Total'**
+  String get totalStockValue;
+
+  /// No description provided for @lowStock.
+  ///
+  /// In es, this message translates to:
+  /// **'Stock Bajo'**
+  String get lowStock;
+
+  /// No description provided for @categories.
+  ///
+  /// In es, this message translates to:
+  /// **'Categorías'**
+  String get categories;
 
   /// No description provided for @addProduct.
   ///
@@ -204,6 +306,378 @@ abstract class L10n {
   /// In es, this message translates to:
   /// **'Modo Offline - Los cambios se sincronizarán pronto'**
   String get offlineMode;
+
+  /// No description provided for @movementInflow.
+  ///
+  /// In es, this message translates to:
+  /// **'Entrada'**
+  String get movementInflow;
+
+  /// No description provided for @movementOutflow.
+  ///
+  /// In es, this message translates to:
+  /// **'Salida'**
+  String get movementOutflow;
+
+  /// No description provided for @noRecentActivity.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin actividad reciente'**
+  String get noRecentActivity;
+
+  /// No description provided for @movementsEmptyDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Las entradas y salidas de stock aparecerán aquí.'**
+  String get movementsEmptyDesc;
+
+  /// No description provided for @unknownUser.
+  ///
+  /// In es, this message translates to:
+  /// **'Usuario desconocido'**
+  String get unknownUser;
+
+  /// No description provided for @adjustment.
+  ///
+  /// In es, this message translates to:
+  /// **'Ajuste'**
+  String get adjustment;
+
+  /// No description provided for @lowStockWarning.
+  ///
+  /// In es, this message translates to:
+  /// **'Solo quedan {count} unidades'**
+  String lowStockWarning(Object count);
+
+  /// No description provided for @deleteProductConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Eliminar producto?'**
+  String get deleteProductConfirm;
+
+  /// No description provided for @deleteProductDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta acción no se puede deshacer y eliminará todo el historial de movimientos.'**
+  String get deleteProductDesc;
+
+  /// No description provided for @productAdded.
+  ///
+  /// In es, this message translates to:
+  /// **'Producto agregado con éxito'**
+  String get productAdded;
+
+  /// No description provided for @productUpdated.
+  ///
+  /// In es, this message translates to:
+  /// **'Producto actualizado'**
+  String get productUpdated;
+
+  /// No description provided for @productDeleted.
+  ///
+  /// In es, this message translates to:
+  /// **'Producto eliminado'**
+  String get productDeleted;
+
+  /// No description provided for @all.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos'**
+  String get all;
+
+  /// No description provided for @search.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscar'**
+  String get search;
+
+  /// No description provided for @addPhoto.
+  ///
+  /// In es, this message translates to:
+  /// **'Añadir foto'**
+  String get addPhoto;
+
+  /// No description provided for @productName.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre del producto'**
+  String get productName;
+
+  /// No description provided for @descriptionOptional.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción (opcional)'**
+  String get descriptionOptional;
+
+  /// No description provided for @createProduct.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear Producto'**
+  String get createProduct;
+
+  /// No description provided for @workspaces.
+  ///
+  /// In es, this message translates to:
+  /// **'Espacios de Trabajo'**
+  String get workspaces;
+
+  /// No description provided for @newWorkspace.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuevo Espacio'**
+  String get newWorkspace;
+
+  /// No description provided for @workspaceName.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre del espacio'**
+  String get workspaceName;
+
+  /// No description provided for @workspaceNameHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej: Almacén Principal'**
+  String get workspaceNameHint;
+
+  /// No description provided for @createWorkspace.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear Espacio'**
+  String get createWorkspace;
+
+  /// No description provided for @noMembers.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin miembros'**
+  String get noMembers;
+
+  /// No description provided for @noMembersDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Invita a tu equipo para empezar a colaborar.'**
+  String get noMembersDesc;
+
+  /// No description provided for @inviteMember.
+  ///
+  /// In es, this message translates to:
+  /// **'Invitar Miembro'**
+  String get inviteMember;
+
+  /// No description provided for @email.
+  ///
+  /// In es, this message translates to:
+  /// **'Correo electrónico'**
+  String get email;
+
+  /// No description provided for @emailHint.
+  ///
+  /// In es, this message translates to:
+  /// **'ejemplo@correo.com'**
+  String get emailHint;
+
+  /// No description provided for @role.
+  ///
+  /// In es, this message translates to:
+  /// **'Rol'**
+  String get role;
+
+  /// No description provided for @sendInvitation.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviar Invitación'**
+  String get sendInvitation;
+
+  /// No description provided for @logout.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar Sesión'**
+  String get logout;
+
+  /// No description provided for @logoutConfirm.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cerrar Sesión?'**
+  String get logoutConfirm;
+
+  /// No description provided for @logoutDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Estás seguro de que deseas cerrar sesión?'**
+  String get logoutDesc;
+
+  /// No description provided for @letsGetStarted.
+  ///
+  /// In es, this message translates to:
+  /// **'¡Comencemos!'**
+  String get letsGetStarted;
+
+  /// No description provided for @letsGetStartedDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'Crea tu primer espacio de trabajo para comenzar a gestionar tu inventario.'**
+  String get letsGetStartedDesc;
+
+  /// No description provided for @errorLoadingWorkspaces.
+  ///
+  /// In es, this message translates to:
+  /// **'Error al cargar espacios'**
+  String get errorLoadingWorkspaces;
+
+  /// No description provided for @members.
+  ///
+  /// In es, this message translates to:
+  /// **'miembros'**
+  String get members;
+
+  /// No description provided for @yourWorkspaces.
+  ///
+  /// In es, this message translates to:
+  /// **'Tus Espacios'**
+  String get yourWorkspaces;
+
+  /// No description provided for @notifications.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificaciones'**
+  String get notifications;
+
+  /// No description provided for @allCaughtUp.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo al día'**
+  String get allCaughtUp;
+
+  /// No description provided for @allCaughtUpDesc.
+  ///
+  /// In es, this message translates to:
+  /// **'No tienes notificaciones pendientes.'**
+  String get allCaughtUpDesc;
+
+  /// No description provided for @editName.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar Nombre'**
+  String get editName;
+
+  /// No description provided for @fullName.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre Completo'**
+  String get fullName;
+
+  /// No description provided for @save.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get save;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambiar Contraseña'**
+  String get changePassword;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraseña Actual'**
+  String get currentPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In es, this message translates to:
+  /// **'Nueva Contraseña'**
+  String get newPassword;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In es, this message translates to:
+  /// **'Confirmar Contraseña'**
+  String get confirmPassword;
+
+  /// No description provided for @update.
+  ///
+  /// In es, this message translates to:
+  /// **'Actualizar'**
+  String get update;
+
+  /// No description provided for @themeAndAppearance.
+  ///
+  /// In es, this message translates to:
+  /// **'Tema y Apariencia'**
+  String get themeAndAppearance;
+
+  /// No description provided for @automaticSystem.
+  ///
+  /// In es, this message translates to:
+  /// **'Automático (Sistema)'**
+  String get automaticSystem;
+
+  /// No description provided for @lightMode.
+  ///
+  /// In es, this message translates to:
+  /// **'Modo Claro'**
+  String get lightMode;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In es, this message translates to:
+  /// **'Modo Oscuro'**
+  String get darkMode;
+
+  /// No description provided for @close.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar'**
+  String get close;
+
+  /// No description provided for @loadingProfile.
+  ///
+  /// In es, this message translates to:
+  /// **'Cargando perfil...'**
+  String get loadingProfile;
+
+  /// No description provided for @password.
+  ///
+  /// In es, this message translates to:
+  /// **'Contraseña'**
+  String get password;
+
+  /// No description provided for @logoutDescAlt.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Estás seguro de que quieres salir?'**
+  String get logoutDescAlt;
+
+  /// No description provided for @login.
+  ///
+  /// In es, this message translates to:
+  /// **'Iniciar Sesión'**
+  String get login;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear Cuenta'**
+  String get createAccount;
+
+  /// No description provided for @fullNameHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Ej. Juan Pérez'**
+  String get fullNameHint;
+
+  /// No description provided for @emailPlaceholder.
+  ///
+  /// In es, this message translates to:
+  /// **'nombre@ejemplo.com'**
+  String get emailPlaceholder;
+
+  /// No description provided for @passwordPlaceholder.
+  ///
+  /// In es, this message translates to:
+  /// **'••••••••'**
+  String get passwordPlaceholder;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

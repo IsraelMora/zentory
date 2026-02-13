@@ -14,7 +14,7 @@ class MovementsBloc extends Bloc<MovementsEvent, MovementsState> {
   static const int _pageSize = 20;
 
   MovementsBloc(this._getMovementsUseCase)
-    : super(const MovementsState.initial()) {
+      : super(const MovementsState.initial()) {
     on<_MovementsFetched>((event, emit) async {
       emit(const MovementsState.loading());
       final result = await _getMovementsUseCase(

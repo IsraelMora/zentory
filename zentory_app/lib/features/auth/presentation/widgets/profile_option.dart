@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
-import 'package:zentory_app/core/widgets/zentory_card.dart';
+import 'package:zentory_app/common/widgets/zentory_card.dart';
 
 class ProfileOption extends StatelessWidget {
   final IconData icon;

@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:zentory_app/core/network/connectivity_bloc.dart';
+import 'package:zentory_app/common/network/connectivity_bloc.dart';
+import 'package:zentory_app/l10n/app_localizations.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
 
 class OfflineBanner extends StatelessWidget {
@@ -27,16 +28,15 @@ class OfflineBanner extends StatelessWidget {
             children: [
               Icon(
                 LucideIcons.wifiOff,
-                color: Colors.white,
+                color: AppDesign.white,
                 size: AppDesign.fontM,
               ),
               SizedBox(width: AppDesign.spaceS),
               Text(
-                'Modo Offline - Los cambios se sincronizarán pronto',
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Colors.white,
+                L10n.of(context)!.offlineMode,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: AppDesign.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: AppDesign.fontXS,
                     ),
               ),
             ],

@@ -1,11 +1,12 @@
-import 'package:auto_route/auto_route.dart';
+﻿import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
 import 'package:zentory_app/core/router/router.gr.dart';
-import 'package:zentory_app/core/widgets/zentory_ui_components.dart';
+import 'package:zentory_app/common/widgets/zentory_ui_components.dart';
 import 'package:zentory_app/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:zentory_app/l10n/app_localizations.dart';
 import 'package:zentory_app/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:zentory_app/features/auth/presentation/widgets/profile_option.dart';
 
@@ -15,6 +16,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = L10n.of(context)!;
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         state.maybeWhen(
@@ -29,7 +31,7 @@ class ProfilePage extends StatelessWidget {
             return state.maybeWhen(
               authenticated: (user) => _buildProfileBody(context, user),
               loading: () => const Center(child: CircularProgressIndicator()),
-              orElse: () => const Center(child: Text('Cargando perfil...')),
+              orElse: () => Center(child: Text(l10n.loadingProfile)),
             );
           },
         ),
@@ -40,9 +42,8 @@ class ProfilePage extends StatelessWidget {
   Widget _buildProfileBody(BuildContext context, dynamic user) {
     return Column(
       children: [
-        const ZentoryHeader(
-          title: 'Mi Perfil',
-          subtitle: 'Configuración personal',
+        ZentoryHeader(
+          title: context.router.current.title(context),
         ),
         Expanded(
           child: SingleChildScrollView(
@@ -51,23 +52,17 @@ class ProfilePage extends StatelessWidget {
               children: [
                 ZentoryIconContainer(
                   icon: LucideIcons.user,
-                  size: AppDesign.fontDisplay * 1.5,
+                  size: AppDesign.fontDisplay,
                   padding: AppDesign.paddingXL,
                 ),
                 SizedBox(height: AppDesign.spaceM),
                 Text(
                   user.name,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: AppDesign.fontXL,
-                      ),
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 Text(
                   user.email,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.secondary,
-                        fontSize: AppDesign.fontM,
-                      ),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 SizedBox(height: AppDesign.spaceXL),
                 ProfileOption(
@@ -106,9 +101,7 @@ class ProfilePage extends StatelessWidget {
                 SizedBox(height: AppDesign.spaceXL),
                 Text(
                   'Zentory v1.0.0',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        fontSize: AppDesign.fontXS,
-                      ),
+                  style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],
             ),
@@ -119,18 +112,19 @@ class ProfilePage extends StatelessWidget {
   }
 
   void _showEditNameDialog(BuildContext context, String currentName) {
+    final l10n = L10n.of(context)!;
     final controller = TextEditingController(text: currentName);
     ZentoryDialogs.showCustomDialog(
       context: context,
-      title: 'Editar Nombre',
+      title: l10n.editName,
       child: TextField(
         controller: controller,
-        decoration: const InputDecoration(labelText: 'Nombre Completo'),
+        decoration: InputDecoration(labelText: l10n.fullName),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancelar'),
+          child: Text(l10n.cancel),
         ),
         SizedBox(width: AppDesign.spaceS),
         ElevatedButton(
@@ -142,13 +136,14 @@ class ProfilePage extends StatelessWidget {
               Navigator.pop(context);
             }
           },
-          child: const Text('Guardar'),
+          child: Text(l10n.save),
         ),
       ],
     );
   }
 
   void _showChangePasswordDialog(BuildContext context) {
+    final l10n = L10n.of(context)!;
     final oldPasswordController = TextEditingController();
     final newPasswordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
@@ -156,7 +151,7 @@ class ProfilePage extends StatelessWidget {
 
     ZentoryDialogs.showCustomDialog(
       context: context,
-      title: 'Cambiar Contraseña',
+      title: l10n.changePassword,
       child: Form(
         key: formKey,
         child: Column(
@@ -164,8 +159,8 @@ class ProfilePage extends StatelessWidget {
           children: [
             TextFormField(
               controller: oldPasswordController,
-              decoration: const InputDecoration(
-                labelText: 'Contraseña Actual',
+              decoration: InputDecoration(
+                labelText: l10n.currentPassword,
               ),
               obscureText: true,
               validator: (value) =>
@@ -173,8 +168,8 @@ class ProfilePage extends StatelessWidget {
             ),
             TextFormField(
               controller: newPasswordController,
-              decoration: const InputDecoration(
-                labelText: 'Nueva Contraseña',
+              decoration: InputDecoration(
+                labelText: l10n.newPassword,
               ),
               obscureText: true,
               validator: (value) =>
@@ -182,8 +177,8 @@ class ProfilePage extends StatelessWidget {
             ),
             TextFormField(
               controller: confirmPasswordController,
-              decoration: const InputDecoration(
-                labelText: 'Confirmar Contraseña',
+              decoration: InputDecoration(
+                labelText: l10n.confirmPassword,
               ),
               obscureText: true,
               validator: (value) =>
@@ -195,7 +190,7 @@ class ProfilePage extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancelar'),
+          child: Text(l10n.cancel),
         ),
         SizedBox(width: AppDesign.spaceS),
         ElevatedButton(
@@ -211,16 +206,17 @@ class ProfilePage extends StatelessWidget {
               ZentoryFeedback.showSuccess(context, 'Contraseña actualizada');
             }
           },
-          child: const Text('Actualizar'),
+          child: Text(l10n.update),
         ),
       ],
     );
   }
 
   void _showThemeSelectionDialog(BuildContext context) {
+    final l10n = L10n.of(context)!;
     ZentoryDialogs.showCustomDialog(
       context: context,
-      title: 'Tema y Apariencia',
+      title: l10n.themeAndAppearance,
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
           final currentTheme = state.maybeWhen(
@@ -232,7 +228,7 @@ class ProfilePage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               RadioListTile<ThemeMode>(
-                title: const Text('Automático (Sistema)'),
+                title: Text(l10n.automaticSystem),
                 value: ThemeMode.system,
                 groupValue: currentTheme,
                 onChanged: (value) {
@@ -244,7 +240,7 @@ class ProfilePage extends StatelessWidget {
                 },
               ),
               RadioListTile<ThemeMode>(
-                title: const Text('Modo Claro'),
+                title: Text(l10n.lightMode),
                 value: ThemeMode.light,
                 groupValue: currentTheme,
                 onChanged: (value) {
@@ -256,7 +252,7 @@ class ProfilePage extends StatelessWidget {
                 },
               ),
               RadioListTile<ThemeMode>(
-                title: const Text('Modo Oscuro'),
+                title: Text(l10n.darkMode),
                 value: ThemeMode.dark,
                 groupValue: currentTheme,
                 onChanged: (value) {
@@ -274,18 +270,19 @@ class ProfilePage extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cerrar'),
+          child: Text(l10n.close),
         ),
       ],
     );
   }
 
   void _showLogoutConfirmation(BuildContext context) {
+    final l10n = L10n.of(context)!;
     ZentoryDialogs.showActionDialog(
       context: context,
-      title: 'Cerrar Sesión',
-      description: '¿Estás seguro de que quieres salir?',
-      confirmLabel: 'Salir',
+      title: l10n.logout,
+      description: l10n.logoutDescAlt,
+      confirmLabel: l10n.logout,
       confirmColor: Theme.of(context).colorScheme.error,
       icon: LucideIcons.logOut,
       onConfirm: () {

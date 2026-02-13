@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
+import 'package:zentory_app/common/widgets/zentory_ui_components.dart';
 
 class ZentoryEmptyState extends StatelessWidget {
   final String title;
@@ -26,19 +27,9 @@ class ZentoryEmptyState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: EdgeInsets.all(AppDesign.paddingL),
-              decoration: BoxDecoration(
-                color: Theme.of(
-                  context,
-                ).colorScheme.primary.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon,
-                size: 64,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+            ZentoryIconContainer(
+              icon: icon,
+              size: 64,
             ),
             SizedBox(height: AppDesign.spaceL),
             Text(

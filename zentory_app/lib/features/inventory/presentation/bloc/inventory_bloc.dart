@@ -294,11 +294,11 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   ) {
     return products.where((product) {
       final nameMatch = product.name.toLowerCase().contains(
-        query.toLowerCase(),
-      );
+            query.toLowerCase(),
+          );
       final descMatch = product.description.toLowerCase().contains(
-        query.toLowerCase(),
-      );
+            query.toLowerCase(),
+          );
       final categoryMatch =
           category == null || category.isEmpty || product.category == category;
       return (nameMatch || descMatch) && categoryMatch;

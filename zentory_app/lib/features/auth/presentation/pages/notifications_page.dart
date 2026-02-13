@@ -1,8 +1,9 @@
-import 'package:auto_route/auto_route.dart';
+﻿import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import 'package:zentory_app/core/widgets/zentory_ui_components.dart';
+import 'package:zentory_app/common/widgets/zentory_ui_components.dart';
+import 'package:zentory_app/l10n/app_localizations.dart';
 
 @RoutePage()
 class NotificationsPage extends StatelessWidget {
@@ -14,16 +15,14 @@ class NotificationsPage extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
-          const ZentoryHeader(
-            title: 'Notificaciones',
-            subtitle: 'Tus alertas',
+          ZentoryHeader(
+            title: context.watchRouter.current.title(context),
             showNotificationButton: false,
           ),
-          const Expanded(
+          Expanded(
             child: ZentoryEmptyState(
-              title: 'Todo al día',
-              description:
-                  'No tienes notificaciones pendientes en este momento.',
+              title: L10n.of(context)!.allCaughtUp,
+              description: L10n.of(context)!.allCaughtUpDesc,
               icon: LucideIcons.bell,
             ),
           ),

@@ -1,7 +1,7 @@
-import 'package:dartz/dartz.dart';
+﻿import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:zentory_app/core/error/failures.dart';
-import 'package:zentory_app/core/utils/image_utils.dart';
+import 'package:zentory_app/common/utils/image_utils.dart';
 import 'package:zentory_app/features/inventory/data/datasources/inventory_local_data_source.dart';
 import 'package:zentory_app/features/inventory/data/datasources/inventory_remote_data_source.dart';
 import 'package:zentory_app/features/inventory/domain/entities/product.dart';

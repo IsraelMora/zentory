@@ -9,3 +9,4 @@ export 'zentory_card.dart';
 export 'zentory_icon_container.dart';
 export 'zentory_dialogs.dart';
 export 'zentory_header.dart';
+export 'zentory_badge.dart';

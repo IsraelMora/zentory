@@ -1,25 +1,24 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:sizer/sizer.dart';
 import 'package:zentory_app/l10n/app_localizations.dart';
 import 'package:zentory_app/core/di/injection.dart';
-import 'package:zentory_app/core/network/connectivity_bloc.dart';
-import 'package:zentory_app/core/network/sync_manager.dart';
+import 'package:zentory_app/common/network/connectivity_bloc.dart';
+import 'package:zentory_app/common/network/sync_manager.dart';
 import 'package:zentory_app/core/router/router.dart';
-import 'package:zentory_app/core/router/router.gr.dart';
 import 'package:zentory_app/core/theme/app_theme.dart';
-import 'package:zentory_app/core/widgets/offline_banner.dart';
+import 'package:zentory_app/common/utils/validation_messages.dart';
+import 'package:zentory_app/common/widgets/offline_banner.dart';
+import 'package:zentory_app/core/router/auth_guard.dart';
 import 'package:zentory_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:zentory_app/features/settings/presentation/bloc/settings_bloc.dart';
-
-import 'package:zentory_app/core/utils/logger.dart';
+import 'package:zentory_app/common/utils/logger.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Global Error Catching
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
     ZentoryLogger.error('Flutter Error', details.exception, details.stack);
@@ -38,7 +37,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _appRouter = AppRouter();
+  late final AppRouter _appRouter;
+
+  @override
+  void initState() {
+    super.initState();
+    _appRouter = AppRouter(AuthGuard(getIt<AuthBloc>()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,73 +58,19 @@ class _MyAppState extends State<MyApp> {
                   getIt<SettingsBloc>()..add(const SettingsEvent.started()),
             ),
           ],
-          child: BlocBuilder<SettingsBloc, SettingsState>(
-            builder: (context, settingsState) {
-              final themeMode = settingsState.maybeWhen(
-                loaded: (mode) => mode,
-                orElse: () => ThemeMode.system,
-              );
+          child: BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+              _appRouter.reevaluateGuards();
+            },
+            child: BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (context, settingsState) {
+                final themeMode = settingsState.maybeWhen(
+                  loaded: (mode) => mode,
+                  orElse: () => ThemeMode.system,
+                );
 
-              return BlocListener<AuthBloc, AuthState>(
-                listener: (context, authState) {
-                  ZentoryLogger.debug(
-                      'Navigation Guard: Auth state changed to $authState');
-
-                  final currentRoute = _appRouter.currentPath;
-                  final isLoginOrSplash = currentRoute.startsWith('/login') ||
-                      currentRoute.startsWith('/splash') ||
-                      currentRoute == '/';
-
-                  ZentoryLogger.debug(
-                      'Navigation Guard: currentRoute: $currentRoute, isLoginOrSplash: $isLoginOrSplash');
-
-                  authState.maybeWhen(
-                    authenticated: (_) {
-                      if (isLoginOrSplash) {
-                        ZentoryLogger.info(
-                            'Global Navigation: Authenticated, redirecting to Workspaces');
-                        _appRouter.replaceAll([const WorkspacesRoute()]);
-                      }
-                    },
-                    unauthenticated: () {
-                      if (!currentRoute.startsWith('/login')) {
-                        ZentoryLogger.info(
-                            'Global Navigation: Unauthenticated, redirecting to Login');
-                        _appRouter.replaceAll([const LoginRoute()]);
-                      }
-                    },
-                    orElse: () {},
-                  );
-                },
-                child: ReactiveFormConfig(
-                  validationMessages: {
-                    ValidationMessage.required: (error) =>
-                        'Este campo es obligatorio',
-                    ValidationMessage.email: (error) =>
-                        'Debe ingresar un correo válido',
-                    ValidationMessage.minLength: (error) =>
-                        'Debe tener al menos ${(error as Map)['requiredLength']} caracteres',
-                    ValidationMessage.maxLength: (error) =>
-                        'Debe tener máximo ${(error as Map)['requiredLength']} caracteres',
-                    ValidationMessage.pattern: (error) =>
-                        'El formato no es válido',
-                    ValidationMessage.mustMatch: (error) =>
-                        'Los campos no coinciden',
-                    ValidationMessage.min: (error) =>
-                        'El valor debe ser mayor o igual a ${(error as Map)['min']}',
-                    ValidationMessage.max: (error) =>
-                        'El valor debe ser menor o igual a ${(error as Map)['max']}',
-                    ValidationMessage.number: (error) =>
-                        'Debe ingresar un número válido',
-                    ValidationMessage.creditCard: (error) =>
-                        'Debe ingresar una tarjeta de crédito válida',
-                    ValidationMessage.equals: (error) =>
-                        'El valor no coincide con el esperado',
-                    ValidationMessage.contains: (error) =>
-                        'El valor no está permitido',
-                    ValidationMessage.any: (error) =>
-                        'Al menos una opción debe ser válida',
-                  },
+                return ReactiveFormConfig(
+                  validationMessages: ZentoryValidationMessages.messages,
                   child: MaterialApp.router(
                     title: 'Zentory',
                     debugShowCheckedModeBanner: false,
@@ -127,12 +78,11 @@ class _MyAppState extends State<MyApp> {
                     darkTheme: AppTheme.dark,
                     themeMode: themeMode,
                     routerConfig: _appRouter.config(),
-                    localizationsDelegates: [
+                    localizationsDelegates: const [
                       L10n.delegate,
                       GlobalMaterialLocalizations.delegate,
                       GlobalWidgetsLocalizations.delegate,
                       GlobalCupertinoLocalizations.delegate,
-                      GlobalMaterialLocalizations.delegate,
                     ],
                     supportedLocales: const [Locale('es'), Locale('en')],
                     builder: (context, child) {
@@ -144,9 +94,9 @@ class _MyAppState extends State<MyApp> {
                       );
                     },
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         );
       },

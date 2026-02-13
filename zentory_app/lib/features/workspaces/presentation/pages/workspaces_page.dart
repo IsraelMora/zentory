@@ -1,69 +1,19 @@
-import 'package:auto_route/auto_route.dart';
+﻿import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
 import 'package:zentory_app/core/di/injection.dart';
-import 'package:zentory_app/core/router/router.gr.dart';
-import 'package:zentory_app/core/widgets/zentory_ui_components.dart';
+import 'package:zentory_app/common/widgets/zentory_ui_components.dart';
 import 'package:zentory_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:zentory_app/features/workspaces/presentation/bloc/workspaces_bloc.dart';
+
+import 'package:zentory_app/features/workspaces/presentation/widgets/workspace_card.dart';
+import 'package:zentory_app/l10n/app_localizations.dart';
 
 @RoutePage()
 class WorkspacesPage extends StatelessWidget {
   const WorkspacesPage({super.key});
-
-  void _showCreateWorkspaceDialog(BuildContext context, WorkspacesBloc bloc) {
-    final controller = TextEditingController();
-    ZentoryDialogs.showCustomDialog(
-      context: context,
-      title: 'Nuevo Espacio',
-      child: TextField(
-        controller: controller,
-        autofocus: true,
-        decoration: InputDecoration(
-          labelText: 'Nombre del espacio',
-          hintText: 'Ej: Almacén Principal',
-          prefixIcon: Icon(
-            LucideIcons.layoutGrid,
-            size: AppDesign.fontL,
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancelar'),
-        ),
-        SizedBox(width: AppDesign.spaceS),
-        ElevatedButton(
-          onPressed: () {
-            if (controller.text.isNotEmpty) {
-              bloc.add(
-                WorkspacesEvent.workspaceCreated(controller.text),
-              );
-              Navigator.pop(context);
-            }
-          },
-          child: const Text('Crear Espacio'),
-        ),
-      ],
-    );
-  }
-
-  void _showLogoutConfirmation(BuildContext context) {
-    ZentoryDialogs.showActionDialog(
-      context: context,
-      title: 'Cerrar Sesión',
-      description: '¿Estás seguro de que quieres salir?',
-      confirmLabel: 'Salir',
-      confirmColor: Theme.of(context).colorScheme.error,
-      icon: LucideIcons.logOut,
-      onConfirm: () {
-        context.read<AuthBloc>().add(const AuthEvent.logoutRequested());
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,17 +47,20 @@ class WorkspacesPage extends StatelessWidget {
                           initial: () => const SizedBox.shrink(),
                           loading: () =>
                               const Center(child: CircularProgressIndicator()),
-                          error: (message) => ZentoryErrorState(
-                            title: 'Error al cargar espacios',
-                            message:
-                                'No pudimos conectar con el servidor. Verifica tu conexión e intenta nuevamente.',
-                            icon: LucideIcons.serverCrash,
-                            onRetry: () {
-                              workspacesBloc.add(
-                                const WorkspacesEvent.workspacesFetched(),
-                              );
-                            },
-                          ),
+                          error: (message) {
+                            final l10n = L10n.of(context)!;
+                            return ZentoryErrorState(
+                              title: l10n.errorLoadingWorkspaces,
+                              message:
+                                  'No pudimos conectar con el servidor. Verifica tu conexión e intenta nuevamente.',
+                              icon: LucideIcons.serverCrash,
+                              onRetry: () {
+                                workspacesBloc.add(
+                                  const WorkspacesEvent.workspacesFetched(),
+                                );
+                              },
+                            );
+                          },
                           loaded: (workspaces) {
                             if (workspaces.isEmpty) {
                               return _buildEmptyState(context, workspacesBloc);
@@ -124,10 +77,8 @@ class WorkspacesPage extends StatelessWidget {
                                 separatorBuilder: (context, index) =>
                                     SizedBox(height: AppDesign.spaceS),
                                 itemBuilder: (context, index) {
-                                  final workspace = workspaces[index];
-                                  return _buildWorkspaceCard(
-                                    context,
-                                    workspace,
+                                  return WorkspaceCard(
+                                    workspace: workspaces[index],
                                   );
                                 },
                               ),
@@ -151,78 +102,82 @@ class WorkspacesPage extends StatelessWidget {
     );
   }
 
+  void _showCreateWorkspaceDialog(BuildContext context, WorkspacesBloc bloc) {
+    final l10n = L10n.of(context)!;
+    final controller = TextEditingController();
+    ZentoryDialogs.showCustomDialog(
+      context: context,
+      title: l10n.newWorkspace,
+      child: TextField(
+        controller: controller,
+        autofocus: true,
+        decoration: InputDecoration(
+          labelText: l10n.workspaceName,
+          hintText: l10n.workspaceNameHint,
+          prefixIcon: Icon(
+            LucideIcons.layoutGrid,
+            size: AppDesign.fontL,
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(l10n.cancel),
+        ),
+        SizedBox(width: AppDesign.spaceS),
+        ElevatedButton(
+          onPressed: () {
+            if (controller.text.isNotEmpty) {
+              bloc.add(
+                WorkspacesEvent.workspaceCreated(controller.text),
+              );
+              Navigator.pop(context);
+            }
+          },
+          child: Text(l10n.createWorkspace),
+        ),
+      ],
+    );
+  }
+
+  void _showLogoutConfirmation(BuildContext context) {
+    final l10n = L10n.of(context)!;
+    ZentoryDialogs.showActionDialog(
+      context: context,
+      title: l10n.logoutConfirm,
+      description: l10n.logoutDesc,
+      confirmLabel: l10n.logout,
+      confirmColor: Theme.of(context).colorScheme.error,
+      icon: LucideIcons.logOut,
+      onConfirm: () {
+        context.read<AuthBloc>().add(const AuthEvent.logoutRequested());
+      },
+    );
+  }
+
   Widget _buildHeader(BuildContext context, WorkspacesBloc bloc) {
+    final l10n = L10n.of(context)!;
     return ZentoryHeader(
-      title: 'Tus Espacios',
-      subtitle: 'Bienvenido a Zentory',
+      title: context.router.current.title(context),
       actions: [
         IconButton(
           onPressed: () => _showLogoutConfirmation(context),
           icon: const Icon(LucideIcons.logOut),
-          tooltip: 'Cerrar Sesión',
+          tooltip: l10n.logout,
         ),
       ],
     );
   }
 
   Widget _buildEmptyState(BuildContext context, WorkspacesBloc bloc) {
+    final l10n = L10n.of(context)!;
     return ZentoryEmptyState(
-      title: '¡Comencemos!',
-      description: 'Crea tu primer espacio para gestionar inventario.',
+      title: l10n.letsGetStarted,
+      description: l10n.letsGetStartedDesc,
       icon: LucideIcons.layoutGrid,
-      actionLabel: 'Crear Espacio',
+      actionLabel: l10n.createWorkspace,
       onAction: () => _showCreateWorkspaceDialog(context, bloc),
-    );
-  }
-
-  Widget _buildWorkspaceCard(BuildContext context, dynamic workspace) {
-    return ZentoryCard(
-      onTap: () {
-        context.router.push(
-          WorkspaceShellRoute(
-            workspaceId: workspace.id,
-            workspaceName: workspace.name,
-          ),
-        );
-      },
-      child: Row(
-        children: [
-          ZentoryIconContainer(
-            icon: LucideIcons.layoutGrid,
-            padding: AppDesign.paddingS,
-            size: AppDesign.fontXL,
-            isCircle: false,
-          ),
-          SizedBox(width: AppDesign.spaceM),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  workspace.name,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontSize: AppDesign.fontM,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(height: AppDesign.spaceXS),
-                Text(
-                  '${workspace.memberIds.length} miembros',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: AppDesign.fontS,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                ),
-              ],
-            ),
-          ),
-          Icon(
-            LucideIcons.chevronRight,
-            color: Theme.of(context).colorScheme.secondary,
-            size: AppDesign.fontL,
-          ),
-        ],
-      ),
     );
   }
 }

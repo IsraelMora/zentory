@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
 import 'package:zentory_app/features/auth/presentation/models/auth_form_model.dart';
+import 'package:zentory_app/l10n/app_localizations.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({
@@ -27,6 +28,7 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = L10n.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -35,8 +37,8 @@ class LoginForm extends StatelessWidget {
             formControl: formModel.nameControl,
             textCapitalization: TextCapitalization.words,
             decoration: InputDecoration(
-              labelText: 'Nombre completo',
-              hintText: 'Ej. Juan Pérez',
+              labelText: l10n.fullName,
+              hintText: l10n.fullNameHint,
               prefixIcon: Icon(LucideIcons.user, size: AppDesign.fontL),
             ),
           ).animate().fade().slideX(begin: -0.1, end: 0),
@@ -46,8 +48,8 @@ class LoginForm extends StatelessWidget {
           formControl: formModel.emailControl,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
-            labelText: 'Correo electrónico',
-            hintText: 'nombre@ejemplo.com',
+            labelText: l10n.email,
+            hintText: l10n.emailPlaceholder,
             prefixIcon: Icon(LucideIcons.mail, size: AppDesign.fontL),
           ),
         ),
@@ -57,8 +59,8 @@ class LoginForm extends StatelessWidget {
           obscureText: obscurePassword,
           onSubmitted: (_) => onSubmit(),
           decoration: InputDecoration(
-            labelText: 'Contraseña',
-            hintText: '••••••••',
+            labelText: l10n.password,
+            hintText: l10n.passwordPlaceholder,
             prefixIcon: Icon(LucideIcons.lock, size: AppDesign.fontL),
             suffixIcon: IconButton(
               icon: Icon(
@@ -76,7 +78,7 @@ class LoginForm extends StatelessWidget {
           ElevatedButton(
             onPressed: onSubmit,
             child: Text(
-              isLogin ? 'Iniciar Sesión' : 'Crear Cuenta',
+              isLogin ? l10n.login : l10n.createAccount,
             ),
           )
               .animate(onPlay: (c) => c.repeat())

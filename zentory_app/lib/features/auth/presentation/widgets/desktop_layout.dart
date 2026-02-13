@@ -85,7 +85,7 @@ class DesktopLayout extends StatelessWidget {
                     children: [
                       Icon(
                         LucideIcons.package,
-                        size: AppDesign.fontDisplay * 2,
+                        size: AppDesign.fontDisplay,
                         color: Theme.of(context).colorScheme.onPrimary,
                       )
                           .animate()
@@ -100,7 +100,7 @@ class DesktopLayout extends StatelessWidget {
                             ?.copyWith(
                               color: Theme.of(context).colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
-                              fontSize: AppDesign.fontDisplay * 1.5,
+                              fontSize: AppDesign.fontDisplay,
                             ),
                       )
                           .animate()
@@ -133,7 +133,7 @@ class DesktopLayout extends StatelessWidget {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 480),
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 48),
+                padding: EdgeInsets.symmetric(horizontal: AppDesign.paddingXL),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -157,7 +157,7 @@ class DesktopLayout extends StatelessWidget {
                             fontSize: AppDesign.fontM,
                           ),
                     ).animate().fade(delay: 100.ms),
-                    SizedBox(height: AppDesign.spaceXL * 1.5),
+                    SizedBox(height: AppDesign.spaceXL),
                     LoginForm(
                       formModel: formModel,
                       isLogin: isLogin,

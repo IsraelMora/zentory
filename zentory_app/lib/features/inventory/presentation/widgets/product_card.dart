@@ -1,9 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
+﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:sizer/sizer.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
+import 'package:zentory_app/common/widgets/zentory_ui_components.dart';
 import 'package:zentory_app/features/inventory/domain/entities/product.dart';
+import 'package:zentory_app/common/utils/extensions.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductEntity product;
@@ -17,145 +18,130 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    final theme = Theme.of(context);
+
+    return ZentoryCard(
+      onTap: onTap,
       margin: EdgeInsets.only(bottom: AppDesign.spaceS),
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: AppDesign.borderMedium,
-        side: BorderSide(color: Theme.of(context).dividerColor),
-      ),
-      child: InkWell(
-        borderRadius: AppDesign.borderMedium,
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.all(AppDesign.paddingM),
-          child: Row(
-            children: [
-              Container(
-                width: 18.w,
-                height: 18.w,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  borderRadius: AppDesign.borderSmall,
-                  image: product.imageUrl != null &&
-                          product.imageUrl!.isNotEmpty
-                      ? DecorationImage(
-                          image: CachedNetworkImageProvider(product.imageUrl!),
-                          fit: BoxFit.cover,
-                        )
-                      : null,
+      child: Row(
+        children: [
+          _ProductImage(imageUrl: product.imageUrl),
+          SizedBox(width: AppDesign.spaceM),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.name,
+                  style: theme.textTheme.titleLarge,
                 ),
-                child: product.imageUrl == null || product.imageUrl!.isEmpty
-                    ? Icon(
-                        LucideIcons.image,
-                        color: Theme.of(context).colorScheme.secondary,
-                      )
-                    : null,
-              ),
-              SizedBox(width: AppDesign.spaceM),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                if (product.description.isNotEmpty) ...[
+                  SizedBox(height: AppDesign.spaceXS),
+                  Text(
+                    product.description,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                ],
+                SizedBox(height: AppDesign.spaceS),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      product.name,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontSize: AppDesign.fontM,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    _PriceAndCategory(
+                      price: product.price,
+                      category: product.category,
                     ),
-                    SizedBox(height: AppDesign.spaceXS),
-                    Text(
-                      product.description,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: AppDesign.fontS,
-                          ),
-                    ),
-                    SizedBox(height: AppDesign.spaceS),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '\$${product.price.toStringAsFixed(2)}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: AppDesign.fontM,
-                                  ),
-                            ),
-                            SizedBox(height: AppDesign.spaceXS),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: AppDesign.paddingXS,
-                                vertical: AppDesign.spaceXS / 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.surfaceContainerHighest,
-                                borderRadius: AppDesign.borderSmall,
-                              ),
-                              child: Text(
-                                product.category,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurfaceVariant,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: AppDesign.paddingS,
-                            vertical: AppDesign.spaceXS,
-                          ),
-                          decoration: BoxDecoration(
-                            color: product.stock < 5
-                                ? Theme.of(
-                                    context,
-                                  ).colorScheme.error.withOpacity(0.1)
-                                : AppDesign.success.withOpacity(0.1),
-                            borderRadius: AppDesign.borderSmall,
-                          ),
-                          child: Text(
-                            'Stock: ${product.stock}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(
-                                  color: product.stock < 5
-                                      ? Theme.of(context).colorScheme.error
-                                      : AppDesign.success,
-                                  fontSize: AppDesign.fontS,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    _StockBadge(stock: product.stock),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProductImage extends StatelessWidget {
+  final String? imageUrl;
+  const _ProductImage({this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    final hasImage = imageUrl != null && imageUrl!.isNotEmpty;
+    // Use AspectRatio and spacing-based width
+    return SizedBox(
+      width: AppDesign.paddingXL, // Driven by tokens
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            borderRadius: AppDesign.borderSmall,
+            image: hasImage
+                ? DecorationImage(
+                    image: CachedNetworkImageProvider(imageUrl!),
+                    fit: BoxFit.cover,
+                  )
+                : null,
+          ),
+          child: !hasImage
+              ? Icon(
+                  LucideIcons.image,
+                  color: Theme.of(context).colorScheme.secondary,
+                )
+              : null,
         ),
       ),
+    );
+  }
+}
+
+class _PriceAndCategory extends StatelessWidget {
+  final double price;
+  final String category;
+
+  const _PriceAndCategory({required this.price, required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          price.toCurrency(),
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: theme.colorScheme.primary,
+          ),
+        ),
+        SizedBox(height: AppDesign.spaceXS),
+        ZentoryBadge(
+          label: category,
+          color: theme.colorScheme.secondary,
+        ),
+      ],
+    );
+  }
+}
+
+class _StockBadge extends StatelessWidget {
+  final int stock;
+  const _StockBadge({required this.stock});
+
+  @override
+  Widget build(BuildContext context) {
+    final isLowStock = stock < 5;
+    final color = isLowStock
+        ? Theme.of(context).colorScheme.error
+        : Theme.of(context).colorScheme.primary;
+
+    return ZentoryBadge(
+      label: 'Stock: $stock',
+      color: color,
+      icon: isLowStock ? LucideIcons.circleAlert : LucideIcons.check,
     );
   }
 }

@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
+
+import 'package:zentory_app/common/widgets/zentory_ui_components.dart';
+import 'package:zentory_app/l10n/app_localizations.dart';
 
 class LowStockList extends StatelessWidget {
   final List<dynamic> items;
@@ -12,55 +15,49 @@ class LowStockList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = L10n.of(context)!;
     return Column(
       children: items.map((item) {
-        return Container(
-          margin: EdgeInsets.only(bottom: AppDesign.spaceS),
-          padding: EdgeInsets.all(AppDesign.paddingM),
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: AppDesign.borderMedium,
-            border: Border.all(color: Theme.of(context).dividerColor),
-          ),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: Theme.of(
-                  context,
-                ).colorScheme.error.withValues(alpha: 0.1),
-                child: Icon(
-                  LucideIcons.triangleAlert,
+        return Padding(
+          padding: EdgeInsets.only(bottom: AppDesign.spaceS),
+          child: ZentoryCard(
+            padding: EdgeInsets.all(AppDesign.paddingM),
+            child: Row(
+              children: [
+                ZentoryIconContainer(
+                  icon: LucideIcons.triangleAlert,
                   color: Theme.of(context).colorScheme.error,
                   size: AppDesign.fontL,
+                  padding: AppDesign.paddingS,
                 ),
-              ),
-              SizedBox(width: AppDesign.paddingM),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.name,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: AppDesign.fontM,
-                          ),
-                    ),
-                    Text(
-                      'Quedan solo ${item.stock} unidades',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontSize: AppDesign.fontS,
-                          ),
-                    ),
-                  ],
+                SizedBox(width: AppDesign.paddingM),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.name,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: AppDesign.fontM,
+                            ),
+                      ),
+                      Text(
+                        l10n.lowStockWarning(item.stock),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontSize: AppDesign.fontS,
+                            ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Icon(
-                LucideIcons.chevronRight,
-                color: Theme.of(context).colorScheme.secondary,
-                size: AppDesign.fontS,
-              ),
-            ],
+                Icon(
+                  LucideIcons.chevronRight,
+                  color: Theme.of(context).colorScheme.secondary,
+                  size: AppDesign.fontS,
+                ),
+              ],
+            ),
           ),
         );
       }).toList(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
+import 'package:zentory_app/l10n/app_localizations.dart';
 
 class ZentoryDialogs {
   static Future<T?> showActionDialog<T>({
@@ -13,6 +14,7 @@ class ZentoryDialogs {
     Color? confirmColor,
     IconData? icon,
   }) {
+    final l10n = L10n.of(context)!;
     return showDialog<T>(
       context: context,
       builder: (context) => Dialog(
@@ -45,19 +47,13 @@ class ZentoryDialogs {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontSize: AppDesign.fontL,
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               SizedBox(height: AppDesign.spaceS),
               Text(
                 description,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontSize: AppDesign.fontM,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               SizedBox(height: AppDesign.spaceXL),
               Row(
@@ -65,7 +61,7 @@ class ZentoryDialogs {
                   Expanded(
                     child: TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text(cancelLabel ?? 'Cancelar'),
+                      child: Text(cancelLabel ?? l10n.cancel),
                     ),
                   ),
                   SizedBox(width: AppDesign.spaceS),
@@ -78,9 +74,9 @@ class ZentoryDialogs {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: confirmColor,
                         foregroundColor:
-                            confirmColor != null ? Colors.white : null,
+                            confirmColor != null ? AppDesign.white : null,
                       ),
-                      child: Text(confirmLabel ?? 'Confirmar'),
+                      child: Text(confirmLabel ?? l10n.confirm),
                     ),
                   ),
                 ],
@@ -116,10 +112,7 @@ class ZentoryDialogs {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontSize: AppDesign.fontL,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),

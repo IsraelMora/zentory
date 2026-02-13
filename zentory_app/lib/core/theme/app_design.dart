@@ -7,13 +7,25 @@ class AppDesign {
   static const Color secondary = Color(0xFF64748B);
   static const Color backgroundLight = Color(0xFFF8FAFC);
   static const Color backgroundDark = Color(0xFF0F172A);
-  static const Color cardLight = Colors.white;
+  static const Color cardLight = white;
   static const Color cardDark = Color(0xFF1E293B);
   static const Color dividerLight = Color(0xFFE2E8F0);
   static const Color dividerDark = Color(0xFF334155);
   static const Color error = Color(0xFFEF4444);
   static const Color success = Color(0xFF10B981);
   static const Color warning = Color(0xFFF59E0B);
+  static const Color info = Color(0xFF3B82F6);
+  static const Color accent = Color(0xFF8B5CF6);
+
+  static const Color white = Colors.white;
+  static const Color black = Colors.black;
+  static const Color transparent = Colors.transparent;
+
+  // Semáticos de texto
+  static const Color textHigh = Color(0xFF1E293B);
+  static const Color textMedium = Color(0xFF64748B);
+  static const Color textLow = Color(0xFF94A3B8);
+  static const Color textOnPrimary = white;
 
   // --- Border Radii ---
   static const double radiusSmall = 8.0;
@@ -49,20 +61,7 @@ class AppDesign {
   static double get fontXXL => 24.sp;
   static double get fontDisplay => 32.sp;
 
-  // --- Shadow Styles ---
-  static List<BoxShadow> get shadowLight => [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: 0.05),
-          blurRadius: 10,
-          offset: const Offset(0, 4),
-        ),
-      ];
-
-  static List<BoxShadow> get shadowMedium => [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: 0.1),
-          blurRadius: 20,
-          offset: const Offset(0, 8),
-        ),
-      ];
+  // --- Shadow Styles (Removed as per design preference) ---
+  static List<BoxShadow> get shadowLight => const [];
+  static List<BoxShadow> get shadowMedium => const [];
 }

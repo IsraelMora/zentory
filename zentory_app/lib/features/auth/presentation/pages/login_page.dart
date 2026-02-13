@@ -1,13 +1,14 @@
-import 'package:auto_route/auto_route.dart';
+﻿import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
-import 'package:zentory_app/core/widgets/zentory_ui_components.dart';
+import 'package:zentory_app/common/widgets/zentory_ui_components.dart';
 import 'package:zentory_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:zentory_app/features/auth/presentation/widgets/desktop_layout.dart';
 import 'package:zentory_app/features/auth/presentation/widgets/mobile_layout.dart';
 import 'package:zentory_app/features/auth/presentation/models/auth_form_model.dart';
+import 'package:zentory_app/core/router/router.gr.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
@@ -80,6 +81,9 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         state.maybeWhen(
+          authenticated: (_) {
+            context.router.replaceAll([const WorkspacesRoute()]);
+          },
           error: (message) {
             ZentoryFeedback.showError(context, message);
           },

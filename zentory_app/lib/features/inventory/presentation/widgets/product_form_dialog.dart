@@ -1,16 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
+﻿import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:sizer/sizer.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
-import 'package:zentory_app/core/widgets/zentory_ui_components.dart';
+import 'package:zentory_app/common/widgets/zentory_ui_components.dart';
 import 'package:zentory_app/features/inventory/domain/entities/product.dart';
+import 'package:zentory_app/features/inventory/domain/enums/product_category.dart';
 import 'package:zentory_app/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:zentory_app/features/inventory/presentation/models/product_form_model.dart';
+
+import 'package:zentory_app/l10n/app_localizations.dart';
 
 class ProductFormDialog extends StatefulWidget {
   final ProductEntity? product;
@@ -36,15 +38,6 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
   bool _isUploading = false;
   final ImagePicker _picker = ImagePicker();
 
-  final List<String> _categories = [
-    'General',
-    'Alimentos',
-    'Bebidas',
-    'Limpieza',
-    'Electrónica',
-    'Hogar',
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -55,18 +48,14 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
       description: widget.product?.description ?? '',
       price: widget.product?.price ?? 0.0,
       stock: widget.product?.stock ?? 0,
-      category: widget.product?.category ?? 'General',
+      category: widget.product?.category ?? ProductCategory.general.displayName,
     );
-
-    if (widget.product?.category != null &&
-        !_categories.contains(widget.product!.category)) {
-      _categories.add(widget.product!.category);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.product != null;
+    final l10n = L10n.of(context)!;
 
     return BlocListener<InventoryBloc, InventoryState>(
       listenWhen: (previous, current) {
@@ -118,7 +107,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        isEditing ? 'Editar Producto' : 'Nuevo Producto',
+                        isEditing ? l10n.editProduct : l10n.addProduct,
                         style: Theme.of(
                           context,
                         )
@@ -133,74 +122,12 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                     ],
                   ),
                   SizedBox(height: AppDesign.spaceXL),
-                  Center(
-                    child: Container(
-                      width: 30.w,
-                      height: 30.w,
-                      decoration: BoxDecoration(
-                        borderRadius: AppDesign.borderMedium,
-                        border: Border.all(
-                          color: Theme.of(context).dividerColor,
-                        ),
-                      ),
-                      child: Material(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: AppDesign.borderMedium,
-                        clipBehavior: Clip.hardEdge,
-                        child: _imageUrl != null
-                            ? Ink.image(
-                                image: CachedNetworkImageProvider(_imageUrl!),
-                                fit: BoxFit.cover,
-                                child: InkWell(
-                                  onTap: () {
-                                    HapticFeedback.lightImpact();
-                                    _pickImage();
-                                  },
-                                  child: _isUploading
-                                      ? const Center(
-                                          child: CircularProgressIndicator())
-                                      : null,
-                                ),
-                              )
-                            : InkWell(
-                                onTap: () {
-                                  HapticFeedback.lightImpact();
-                                  _pickImage();
-                                },
-                                child: _isUploading
-                                    ? const Center(
-                                        child: CircularProgressIndicator())
-                                    : Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            LucideIcons.camera,
-                                            size: AppDesign.fontXXL,
-                                            color: Theme.of(
-                                              context,
-                                            ).colorScheme.secondary,
-                                          ),
-                                          SizedBox(height: AppDesign.spaceXS),
-                                          Text(
-                                            'Añadir foto',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .labelLarge
-                                                ?.copyWith(
-                                                    fontSize: AppDesign.fontXS),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                      ),
-                    ),
-                  ),
+                  _buildPhotoSection(context, l10n),
                   SizedBox(height: AppDesign.spaceL),
                   ReactiveTextField<String>(
                     formControl: _formModel.nameControl,
                     decoration: InputDecoration(
-                      labelText: 'Nombre del producto',
+                      labelText: l10n.productName,
                       prefixIcon: Icon(
                         LucideIcons.package,
                         size: AppDesign.fontL,
@@ -212,7 +139,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                     formControl: _formModel.descriptionControl,
                     maxLines: 2,
                     decoration: InputDecoration(
-                      labelText: 'Descripción (opcional)',
+                      labelText: l10n.descriptionOptional,
                       prefixIcon: Icon(LucideIcons.type, size: AppDesign.fontL),
                     ),
                   ),
@@ -223,7 +150,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                         child: ReactiveTextField<double>(
                           formControl: _formModel.priceControl,
                           decoration: InputDecoration(
-                            labelText: 'Precio',
+                            labelText: l10n.price,
                             prefixIcon: Icon(
                               LucideIcons.dollarSign,
                               size: AppDesign.fontL,
@@ -239,7 +166,7 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                         child: ReactiveTextField<int>(
                           formControl: _formModel.stockControl,
                           decoration: InputDecoration(
-                            labelText: 'Stock',
+                            labelText: l10n.stock,
                             prefixIcon:
                                 Icon(LucideIcons.hash, size: AppDesign.fontL),
                           ),
@@ -252,10 +179,10 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                   ReactiveDropdownField<String>(
                     formControl: _formModel.categoryControl,
                     decoration: InputDecoration(
-                      labelText: 'Categoría',
+                      labelText: l10n.category,
                       prefixIcon: Icon(LucideIcons.tag, size: AppDesign.fontL),
                     ),
-                    items: _categories
+                    items: ProductCategory.displayNames
                         .map((c) => DropdownMenuItem(value: c, child: Text(c)))
                         .toList(),
                     onChanged: (val) {
@@ -287,10 +214,10 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, AppDesign.spaceL * 2),
+                      minimumSize: Size(double.infinity, AppDesign.spaceXL),
                     ),
                     child: Text(
-                      isEditing ? 'Guardar Cambios' : 'Crear Producto',
+                      isEditing ? l10n.saveChanges : l10n.createProduct,
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
                             fontSize: AppDesign.fontM,
                             fontWeight: FontWeight.bold,
@@ -302,15 +229,14 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                     TextButton(
                       onPressed: () {
                         HapticFeedback.heavyImpact();
-                        _showDeleteConfirmation(context);
+                        _showDeleteConfirmation(context, l10n);
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: Theme.of(context).colorScheme.error,
-                        minimumSize:
-                            Size(double.infinity, AppDesign.spaceL * 2),
+                        minimumSize: Size(double.infinity, AppDesign.spaceXL),
                       ),
                       child: Text(
-                        'Eliminar Producto',
+                        l10n.deleteProduct,
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
                               fontSize: AppDesign.fontS,
                               color: Theme.of(context).colorScheme.error,
@@ -320,6 +246,71 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
                   ],
                 ],
               ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPhotoSection(BuildContext context, L10n l10n) {
+    return Center(
+      child: SizedBox(
+        width: AppDesign.paddingXL,
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: AppDesign.borderMedium,
+              border: Border.all(
+                color: Theme.of(context).dividerColor,
+              ),
+            ),
+            child: Material(
+              color: Theme.of(context).cardColor,
+              borderRadius: AppDesign.borderMedium,
+              clipBehavior: Clip.hardEdge,
+              child: _imageUrl != null
+                  ? Ink.image(
+                      image: CachedNetworkImageProvider(_imageUrl!),
+                      fit: BoxFit.cover,
+                      child: InkWell(
+                        onTap: () {
+                          HapticFeedback.lightImpact();
+                          _pickImage();
+                        },
+                        child: _isUploading
+                            ? const Center(child: CircularProgressIndicator())
+                            : null,
+                      ),
+                    )
+                  : InkWell(
+                      onTap: () {
+                        HapticFeedback.lightImpact();
+                        _pickImage();
+                      },
+                      child: _isUploading
+                          ? const Center(child: CircularProgressIndicator())
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  LucideIcons.camera,
+                                  size: AppDesign.fontXXL,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                                SizedBox(height: AppDesign.spaceXS),
+                                Text(
+                                  l10n.addPhoto,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge
+                                      ?.copyWith(fontSize: AppDesign.fontXS),
+                                ),
+                              ],
+                            ),
+                    ),
             ),
           ),
         ),
@@ -342,13 +333,12 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
     }
   }
 
-  void _showDeleteConfirmation(BuildContext context) {
+  void _showDeleteConfirmation(BuildContext context, L10n l10n) {
     ZentoryDialogs.showActionDialog(
       context: context,
-      title: '¿Eliminar producto?',
-      description:
-          'Esta acción no se puede deshacer y eliminará todo el historial de movimientos.',
-      confirmLabel: 'Eliminar',
+      title: l10n.deleteProductConfirm,
+      description: l10n.deleteProductDesc,
+      confirmLabel: l10n.confirm, // or l10n.delete
       confirmColor: Theme.of(context).colorScheme.error,
       icon: LucideIcons.trash2,
       onConfirm: () {

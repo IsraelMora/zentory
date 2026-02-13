@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:zentory_app/core/theme/app_design.dart';
+import 'package:zentory_app/common/widgets/zentory_ui_components.dart';
+
+import 'package:zentory_app/l10n/app_localizations.dart';
 
 class ZentoryErrorState extends StatelessWidget {
   final String title;
@@ -26,20 +29,11 @@ class ZentoryErrorState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: EdgeInsets.all(AppDesign.paddingL),
-              decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .colorScheme
-                    .errorContainer
-                    .withValues(alpha: 0.3),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                icon ?? LucideIcons.circleAlert,
-                size: AppDesign.fontDisplay * 1.5,
-                color: Theme.of(context).colorScheme.error,
-              ),
+            ZentoryIconContainer(
+              icon: icon ?? LucideIcons.circleAlert,
+              color: Theme.of(context).colorScheme.error,
+              size: AppDesign.fontDisplay * 1.5,
+              padding: AppDesign.paddingL,
             ),
             SizedBox(height: AppDesign.spaceXL),
             Text(
@@ -64,7 +58,7 @@ class ZentoryErrorState extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: Icon(LucideIcons.refreshCw, size: AppDesign.fontL),
-                label: Text(retryLabel ?? 'Reintentar'),
+                label: Text(retryLabel ?? L10n.of(context)!.retry),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(
                     horizontal: AppDesign.paddingXL,
